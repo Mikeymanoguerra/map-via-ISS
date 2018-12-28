@@ -3,7 +3,7 @@
 /* global api, $  */
 
 $(document).ready(function() {
-  console.log('document ready ran');
-  api.getCoordinates();
+  console.log('end');
+  // api.getISSdata(api.getCoordinates);
 
 });
