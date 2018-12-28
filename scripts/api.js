@@ -13,13 +13,18 @@ const api = (function(){
   const getCoordinates = function(data){
     const latitude = data['iss_position'].latitude;
     const longitude =data['iss_position'].longitude;
-    console.log(latitude, longitude);
+    const coorString =`${latitude},${longitude}`;
+    console.log(coorString);
+    return coorString;
   };
 
+  // need to add a promise somehow
 
-  // 37.7749,-122.4194&size=@2x
   const getMapImage = function(callback){
-    $
+    console.log('getMapImage ran');
+    const coordinatesString = getISSdata(getCoordinates);
+    console.log(coordinatesString);
+    $.getJSON(`${MAP_URL}${coordinatesString}&size=@2x`,callback);
   }
 
 // use those coordinates to get picture of the map open static map api
@@ -35,6 +40,7 @@ const api = (function(){
   return{
     getISSdata,
     getCoordinates,
+    getMapImage,
   };
 
 }());
