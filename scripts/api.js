@@ -23,13 +23,19 @@ const api = (function(){
   // need to add a promise somehow
 
   const getMapImage = function(callback){
-    console.log('getMapImage ran');
-    // const coordinatesString = getISSdata(getCoordinates);
-    // console.log(coordinatesString);
-    // $.getJSON(`${MAP_URL}${coordinatesString}&size=@2x`,callback);
-    $.getJSON(`${mapTestURL}`, callback);
+    $.ajax({
+      method: 'GET',
+      url: `${mapTestURL}`,
+      // contentType: 'application/json',
+      // data: getCoordinates(),
+      success  : callback,
+
+    });
+
   };
 
+
+ 
 
   const whatsTheObject = function(data){
     console.log(data, typeof data, 'success');

@@ -5,6 +5,6 @@
 $(document).ready(function() {
   console.log('end');
   // api.getISSdata(api.getCoordinates);
-  api.getMapImage(api.whatsTheObject);
+  api.getMapImage(function(data){console.log(typeof data);});
 
 });
