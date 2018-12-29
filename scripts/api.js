@@ -3,9 +3,10 @@
 
 const api = (function(){
 
+  
   const ISS_URL = 'http://api.open-notify.org/iss-now.json?callback=?';
-  const MAP_URL = 'https://open.mapquestapi.com/staticmap/v5/map?key=KEY&center=';
-  const mapTestURL = 'https://open.mapquestapi.com/staticmap/v5/map?key=KEY&center=-11.2631,-10.9335&size=@2x';
+  // const MAP_URL = ;
+  const mapTestURL = 'https://www.mapquestapi.com/staticmap/v5/map?key=Zv1VRVyg4mhlWC8AmfdyyfhLhZS5EGcO&center=San+Francisco,CA&zoom=14&type=map';
   
   const getISSdata = function(callback){
     $.getJSON(`${ISS_URL}`, callback);
@@ -23,10 +24,16 @@ const api = (function(){
 
   const getMapImage = function(callback){
     console.log('getMapImage ran');
-    const coordinatesString = getISSdata(getCoordinates);
-    console.log(coordinatesString);
+    // const coordinatesString = getISSdata(getCoordinates);
+    // console.log(coordinatesString);
     // $.getJSON(`${MAP_URL}${coordinatesString}&size=@2x`,callback);
     $.getJSON(`${mapTestURL}`, callback);
+  };
+
+
+  const whatsTheObject = function(data){
+    console.log(data, typeof data, 'success');
+
   }
 
 // use those coordinates to get picture of the map open static map api
@@ -43,6 +50,7 @@ const api = (function(){
     getISSdata,
     getCoordinates,
     getMapImage,
+    whatsTheObject,
   };
 
 }());
