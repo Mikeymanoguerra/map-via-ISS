@@ -5,6 +5,10 @@
 $(document).ready(function() {
   console.log('end');
   // api.getISSdata(api.getCoordinates);
-  api.getMapImage(function(data){console.log(typeof data);});
+  api.getNasaImage( function(data){ 
+    const url = data.url;
+    const htmlString = `<img src="${url}" alt="ehh">`;
+    $('.js-results').html(htmlString);
+  });
 
 });
