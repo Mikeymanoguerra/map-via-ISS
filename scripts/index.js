@@ -4,6 +4,6 @@
 
 $(document).ready(function() {
   console.log('end');
-  api.getNasaImage();
+  api.getISSdata(data => api.getNasaImage(api.getCoordinates(data)));
 });
 
