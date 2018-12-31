@@ -8,7 +8,8 @@ const api = (function(){
   // const MAP_URL = 'https://www.mapquestapi.com/staticmap/v5/map?key=Zv1VRVyg4mhlWC8AmfdyyfhLhZS5EGcO&center=';
   const NASA_URL = 'https://api.nasa.gov/planetary/earth/imagery?';
   const api_key = 'api_key=6xjJbi1FBz5ogidAuBgD1CNzpVDhMlopTUXgFTLY';
-  // const testCoordinates = 'lon=-42.4009&lat=-13.9241';
+  const testCoordinates = 'lon=-75.1253377&lat=39.9793544';
+  
 
   const  getCoordinates = function(data){
     const latitude = data['iss_position'].latitude;
@@ -20,7 +21,7 @@ const api = (function(){
 
   const getNasaImage = function (coordinates){
     console.log('NASA ajax ran');
-    $.getJSON(`${NASA_URL}${coordinates}&dim=.2&${api_key}`, htmlToDom);
+    $.getJSON(`${NASA_URL}${coordinates}&dim=.1&${api_key}`, htmlToDom);
   };
 
   const htmlToDom = function(data){ 
@@ -55,7 +56,8 @@ const api = (function(){
   return{
     getISSdata,
     getNasaImage,
-    getCoordinates
+    getCoordinates,
+    testCoordinates
    
   };
 
