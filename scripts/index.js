@@ -1,9 +1,10 @@
 // document ready function
 'use strict';
-/* global api, $  */
+/* global events, api, $  */
 
 $(document).ready(function() {
   console.log('end');
-  api.getISSdata(data => api.getNasaImage(api.getCoordinates(data)));
+  events.getfirstImage();  
+  dataStore.here();
 });
 
