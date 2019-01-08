@@ -8,9 +8,20 @@ const events = (function(){
 
   const getfirstImage = function(){
     $('.button').on('click', '.js-get-data', function(){
-      api.getISSdata(data => dataStore.getCoordinates(data));
+      new Promise( function(resolve){
+        const obj = api.getISSdata()
+        resolve(obj);})
+        .then(data => dataStore.getCoordinates(data))
+        .then(coors => { console.log(coors);});
     });
   };
+
+
+  //   const getfirstImage = function(){
+  //   $('.button').on('click', '.js-get-data', function(){
+  //     api.getISSdata(data => dataStore.getCoordinates(data));
+  //   });
+  // };
 
   const htmlToDom = function(data){ 
     const url = data.url;

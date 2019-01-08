@@ -12,20 +12,19 @@ const dataStore = (function(){
     const longitude =data['iss_position'].longitude;
     const coorString =`lon=${longitude}&lat=${latitude}`;
     console.log(coorString);
-    events.htmlToDom(coorString);
+    return coorString;
   };
 
-
+  const pushToArray = function(obj) { 
+    this.dataArray.push(obj);
+  };
 
   //  got this iffee wired up and recieves the data on the click. next i guess i have to store the data on 
   // on the store array and use that to make my request to NASA. right now the current itertaion of the
   //  fn in events returns undefined.
 
 
-  const here =function(){
   
-
-  };
 
 
   // Any functions that deal with looking back and forth in time for nasa data, and degrees of photo go here
@@ -33,8 +32,11 @@ const dataStore = (function(){
 
 
   return{
+
+    dataArray : [],
     getCoordinates,
-    here
+    pushToArray,
+
 
   };
 

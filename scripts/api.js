@@ -16,8 +16,9 @@ const api = (function(){
   };
 
 
-  const getISSdata = function(callback){
-    $.getJSON(`${ISS_URL}`,callback);
+  const getISSdata = function(){
+    return $.getJSON(`${ISS_URL}`);
+     
   };
 
   // getISSdata.then(function(coorString){
