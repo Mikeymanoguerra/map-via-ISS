@@ -7,18 +7,15 @@ const events = (function(){
 // give button a couple second timeout
 
   const getfirstImage = function(){
-    console.log('get first image ran');
     $('.button').on('click', '.js-get-data', function(){
-      console.log('click register');
-    api.getISSdata(data => dataStore.getCoordinates(data));
-      // console.log(coorString);
-        // .then(coorString => api.getNasaImage(coorString, htmlToDom));
+      api.getISSdata(data => dataStore.getCoordinates(data));
     });
   };
 
   const htmlToDom = function(data){ 
     const url = data.url;
     const htmlString = `<img src="${url}" alt="ehh">`;
+    console.log(htmlString);
     $('.js-results').html(htmlString); 
   };
   //  event listener for button click
@@ -29,7 +26,8 @@ const events = (function(){
   // Bind event listeners
 
   return {
-    getfirstImage
+    getfirstImage,
+    htmlToDom
   };
 }());
 

@@ -5,6 +5,6 @@
 $(document).ready(function() {
   console.log('end');
   events.getfirstImage();  
-  dataStore.here();
+  
 });
 

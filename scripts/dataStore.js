@@ -1,5 +1,5 @@
 'use strict';
-/*global dataStore */
+/*global events dataStore */
 
 const dataStore = (function(){
 
@@ -12,7 +12,7 @@ const dataStore = (function(){
     const longitude =data['iss_position'].longitude;
     const coorString =`lon=${longitude}&lat=${latitude}`;
     console.log(coorString);
-    return coorString;
+    events.htmlToDom(coorString);
   };
 
 
@@ -23,7 +23,7 @@ const dataStore = (function(){
 
 
   const here =function(){
-    console.log('im here!');
+  
 
   };
 
