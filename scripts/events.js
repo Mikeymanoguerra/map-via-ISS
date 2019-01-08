@@ -12,9 +12,10 @@ const events = (function(){
         const obj = api.getISSdata();
         resolve(obj);})
         .then(data => dataStore.getCoordinates(data))
-        .then(coors => { console.log(coors);});
+        .then(coors => api.getNasaImage(coors, data => htmlToDom(data)));
     });
   };
+  
 
 
 
