@@ -9,13 +9,24 @@ const events = (function(){
   const getfirstImage = function(){
     $('.button').on('click', '.js-get-data', function(){
       new Promise( function(resolve){
-        const obj = api.getISSdata()
+        const obj = api.getISSdata();
         resolve(obj);})
         .then(data => dataStore.getCoordinates(data))
         .then(coors => { console.log(coors);});
     });
   };
 
+
+
+
+  // const getfirstImage = function(){
+  //   $('.button').on('click', '.js-get-data', function(){
+  //     new Promise( function(resolve){
+  //       resolve( api.getISSdata(data =>
+  //         dataStore.getCoordinates(data)));})
+  //       .then(coors => { console.log(coors);});
+  //   });
+  // };
 
   //   const getfirstImage = function(){
   //   $('.button').on('click', '.js-get-data', function(){
