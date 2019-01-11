@@ -6,6 +6,11 @@ This is an API implementation practice that uses current ISS coordinates to retu
 things to do:
   go back in time on nasa api
   change dimentions on nasa api
+  add image to the location objects in an array
+  if statement about 500 error? delete object,
+  turn to false, or save it for data storage......
+
+  
 
   array methods for data store
     store, delete if 500 error

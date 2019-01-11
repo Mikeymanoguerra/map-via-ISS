@@ -1,8 +1,8 @@
 'use strict';
-/*global $ */
+/*global dataStore, $ */
 
 const api = (function(){
-
+  const testCoors = dataStore.Mock_DATA[0].coorString;
   
   const ISS_URL = 'http://api.open-notify.org/iss-now.json?callback=?';
   const NASA_URL = 'https://api.nasa.gov/planetary/earth/imagery?';
@@ -11,8 +11,7 @@ const api = (function(){
   // const MAP_URL = 'https://www.mapquestapi.com/staticmap/v5/map?key=Zv1VRVyg4mhlWC8AmfdyyfhLhZS5EGcO&center=';
 
   const getNasaImage = function (coordinates, callback){
-    console.log('NASA ajax ran');
-    $.getJSON(`${NASA_URL}${coordinates}&dim=.1&${api_key}`, callback);
+    return  $.getJSON(`${NASA_URL}${coordinates}&dim=.1&${api_key}`, callback);
   };
 
 
@@ -47,7 +46,8 @@ const api = (function(){
   return{
     getISSdata,
     getNasaImage,
-    testCoordinates
+    testCoordinates,
+    testCoors
    
   };
 

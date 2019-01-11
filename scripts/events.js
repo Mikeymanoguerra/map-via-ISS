@@ -7,38 +7,24 @@ const events = (function(){
 // give button a couple second timeout
 
   const getfirstImage = function(){
-    $('.button').on('click', '.js-get-data', function(){
+    $('.button-container').on('click', '.js-get-data', function(){
       new Promise( function(resolve){
         const obj = api.getISSdata();
         resolve(obj);})
         .then(data => dataStore.getCoordinates(data))
-        .then(coors => api.getNasaImage(coors, data => htmlToDom(data)));
+        .then(id => { 
+          const location = dataStore.findLocationById(id);
+          const coors = location.coorString;
+          return api.getNasaImage(coors);
+        })
+        .then(data => htmlToDom(data));
     });
   };
   
-
-
-
-
-  // const getfirstImage = function(){
-  //   $('.button').on('click', '.js-get-data', function(){
-  //     new Promise( function(resolve){
-  //       resolve( api.getISSdata(data =>
-  //         dataStore.getCoordinates(data)));})
-  //       .then(coors => { console.log(coors);});
-  //   });
-  // };
-
-  //   const getfirstImage = function(){
-  //   $('.button').on('click', '.js-get-data', function(){
-  //     api.getISSdata(data => dataStore.getCoordinates(data));
-  //   });
-  // };
-
   const htmlToDom = function(data){ 
     const url = data.url;
     const htmlString = `<img src="${url}" alt="ehh">`;
-    console.log(htmlString);
+    //  add the img to the object for later...
     $('.js-results').html(htmlString); 
   };
   //  event listener for button click
