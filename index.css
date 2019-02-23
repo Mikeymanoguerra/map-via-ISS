@@ -2,6 +2,9 @@
   font-family: 'Courier New', Courier, monospace;
 
 }
+img{
+  max-width:500px;
+}
 
 h1{
   text-align: center;
@@ -14,10 +17,24 @@ h1{
   border-width : 1px 0px;
   border-color: black;
   border-style: solid;
+  margin-left: auto;
+  margin-right: auto;
 }
-.js-results{
-  width: 100%;
+
+#results-container{
+  display:flex;
+  justify-content: center;
+  align-items: flex-start;
+  margin-left: auto;
+  margin-right: auto;
+  flex-wrap: wrap;
+
+}
+.map-results, .nasa-results{
+  min-width: 500px;
   padding: 10px;
+  margin:1%;
+  border: 1px solid black;
 }
 img{
   display: block;

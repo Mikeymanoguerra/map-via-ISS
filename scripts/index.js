@@ -2,9 +2,11 @@
 'use strict';
 /* global events, api, $  */
 
-$(document).ready(function() {
+$(document).ready(function () {
   console.log('end');
-  events.getfirstImage();  
-  
+  events.getfirstImage();
+  events.getMap();
+  events.addFakeData();
+
 });
 
