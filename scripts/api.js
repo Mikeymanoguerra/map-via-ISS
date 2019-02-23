@@ -10,8 +10,8 @@ const api = (function () {
   const testCoordinates = '-75.12,39.974';
   const MAP_URL = 'https://www.mapquestapi.com/staticmap/v5/map?key=Zv1VRVyg4mhlWC8AmfdyyfhLhZS5EGcO&locations=';
 
-  const getNasaImage = function (coordinates, callback) {
-    return $.getJSON(`${NASA_URL}${coordinates}&dim=.1&${NASA_API_KEY}`, callback);
+  const getNasaImage = function (coordinates, date, callback) {
+    return $.getJSON(`${NASA_URL}${coordinates}&${date}&dim=.1&${NASA_API_KEY}`, callback);
   };
 
   const getMapData = (coordinates) => {
