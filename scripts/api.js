@@ -12,9 +12,9 @@ const api = (function () {
   const currentDateArray = utils.getCurrentDateArray();
   const currentDateString = utils.dateToHyphenString(currentDateArray);
 
-  const getNasaImage = function (coordinates, date = '2013-12-31', callback) {
+  const getNasaImage = function (coordinates, date = '2013-11-20', callback) {
     console.log(coordinates, date);
-    return $.getJSON(`${NASA_URL}${coordinates}&date=${date}&dim=.1&${NASA_API_KEY}`, callback);
+    return $.getJSON(`${NASA_URL}${coordinates}&date=${date}&dim=.05&${NASA_API_KEY}`, callback);
   };
 
   const getMapData = (coordinates) => {
