@@ -7,6 +7,6 @@ $(document).ready(function () {
   events.getfirstImage();
   events.getMap();
   events.addFakeData();
-
+  events.getEarlierImage();
 });
 

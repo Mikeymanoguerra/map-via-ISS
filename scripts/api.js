@@ -1,5 +1,5 @@
 'use strict';
-/*global dataStore, $ */
+/*global dataStore, utils, $ */
 
 const api = (function () {
   const testCoors = dataStore.Mock_DATA[0].nasaCoordinates;
@@ -7,11 +7,14 @@ const api = (function () {
   const ISS_URL = 'http://api.open-notify.org/iss-now.json?callback=?';
   const NASA_URL = 'https://api.nasa.gov/planetary/earth/imagery?';
   const NASA_API_KEY = 'api_key=6xjJbi1FBz5ogidAuBgD1CNzpVDhMlopTUXgFTLY';
-  const testCoordinates = '-75.12,39.974';
   const MAP_URL = 'https://www.mapquestapi.com/staticmap/v5/map?key=Zv1VRVyg4mhlWC8AmfdyyfhLhZS5EGcO&locations=';
 
-  const getNasaImage = function (coordinates, date, callback) {
-    return $.getJSON(`${NASA_URL}${coordinates}&${date}&dim=.1&${NASA_API_KEY}`, callback);
+  const currentDateArray = utils.getCurrentDateArray();
+  const currentDateString = utils.dateToHyphenString(currentDateArray);
+
+  const getNasaImage = function (coordinates, date = '2013-12-31', callback) {
+    console.log(coordinates, date);
+    return $.getJSON(`${NASA_URL}${coordinates}&date=${date}&dim=.1&${NASA_API_KEY}`, callback);
   };
 
   const getMapData = (coordinates) => {
@@ -57,8 +60,6 @@ const api = (function () {
   return {
     getISSdata,
     getNasaImage,
-    testCoordinates,
-    testCoors,
     getMapData
   };
 

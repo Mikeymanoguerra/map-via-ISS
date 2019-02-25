@@ -22,6 +22,20 @@ const goBackInTimeOneMonth = (dateArray) => {
   } else return monthMinusOne;
 };
 
+const goForwardInTimeOneMonth = (dateArray) => {
+  const monthPlusOne = dateArray.map((n, index) => {
+    return index === 1 ? n + 1 : n;
+  });
+  if (monthPlusOne[1] === 13) {
+    const yearAdjustedArray = monthPlusOne.map((n, index) => {
+      if (index === 0) { return n + 1; }
+      if (index === 1) { return n = 1; }
+      else return n;
+    });
+    return yearAdjustedArray;
+  } else return monthPlusOne;
+};
+
 const dateToString = (dateArray) => {
   let year = dateArray[0];
   let month = dateArray[1];
@@ -41,5 +55,7 @@ const dateToString = (dateArray) => {
 const today = getCurrentDateArray();
 const january = goBackInTimeOneMonth(today);
 const december = goBackInTimeOneMonth(january);
+const jan = goForwardInTimeOneMonth(december);
+const feb = goForwardInTimeOneMonth(jan);
 
-console.log(dateToString(january), dateToString(december));
+console.log(dateToString(jan), dateToString(feb));

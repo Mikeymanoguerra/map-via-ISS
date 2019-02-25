@@ -1,6 +1,6 @@
 'use strict';
 
-/* global dataStore, $, api */
+/* global dataStore, utils, $, api */
 
 const events = (function () {
   // when the button is clicked, use the Open Notify Api to get coordinates of ISS
@@ -22,23 +22,39 @@ const events = (function () {
     });
   };
 
+  const getEarlierImage = () => {
+    let id;
+    $('.nasa-results').on('click', '.go-back', function () {
+      const _id = parseInt($('.go-back').siblings('img.satellite').attr('value'));
+      id = _id;
+      const location = dataStore.findLocationById(id);
+      const coors = location.nasaCoordinates;
+      const oneMonthEarlierArray = utils.goBackInTimeOneMonth(location.date);
+      location.date = oneMonthEarlierArray;
+      const dateString = utils.dateToHyphenString(oneMonthEarlierArray);
+      return api.getNasaImage(coors, dateString)
+        .then((data) => nasaImageToDom(data, id))
+        .catch(err => console.log(err));
+    });
+  };
+
   const addFakeData = function () {
     $('.button-container').on('click', '.test-data', function () {
       dataStore.seedData();
-      const location = dataStore.findLocationById(8);
+      const location = dataStore.findLocationById(9);
       const coors = location.nasaCoordinates;
       return api.getNasaImage(coors)
         .then((data) => {
           console.log(data);
-          return nasaImageToDom(data, 8);
+          return nasaImageToDom(data, 9);
         })
         .catch(err => console.log(err));
     });
   };
 
   const getMap = function () {
-    $('.button-container').on('click', '.map', function () {
-      const id = parseInt($('.map').closest('.action-container').find('img.satellite').attr('value'));
+    $('.nasa-results').on('click', '.matching-map', function () {
+      const id = parseInt($('.matching-map').siblings('img.satellite').attr('value'));
       const location = dataStore.findLocationById(id);
       const coors = location.mapCoordinates;
       return api.getMapData(coors)
@@ -60,7 +76,9 @@ const events = (function () {
     value=${id} 
     src="${url}" alt="satellite image at  longitude ${longitude}, latitude ${latitude}">
     <p>Longitude: ${longitude}, Latitude: ${latitude}</p>
-    <span>Get this location on a map!</span><button>use above map button</button>
+    <span>Get this location on a map!</span><button class='matching-map'>Get!</button><br>
+    <button class='go-back'>Go back in time</button>
+    <button class='go-forward'>Go forward in time</button>
     `;
     //  add the img to the object for later...
     $('.nasa-results').html(htmlString);
@@ -76,7 +94,8 @@ const events = (function () {
     getfirstImage,
     nasaImageToDom,
     getMap,
-    addFakeData
+    addFakeData,
+    getEarlierImage,
   };
 }());
 

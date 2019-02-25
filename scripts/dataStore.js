@@ -8,9 +8,9 @@ const dataStore = (function () {
       id: 8,
       nasaCoordinates: 'lon=32.1453&lat=-17.8883',
       degrees: 0.01,
-      mapCoordinates:'-17.8883,32.1453',
-      longitude:32.1453,
-      latitude:-17.8883,
+      mapCoordinates: '-17.8883,32.1453',
+      longitude: 32.1453,
+      latitude: -17.8883,
       date: null,
       photoExists: true,
       imageUrls: []
@@ -22,14 +22,14 @@ const dataStore = (function () {
       degrees: 0.01,
       longitude: 75.1652,
       latitude: 39.9526,
-      date: null,
+      date: [2013, 12, 24],
       photoExists: true,
       imageUrls: ['https://earthengine.googleapis.com/api/thumb?thumbid=bc9b6d19904dfffe9e45271e308630ba&token=f0aee8f19cfd7d48dbd4a257fa9f181f']
     },
 
   ];
   const seedData = function () {
-    pushToArray(Mock_DATA[0]);
+    pushToArray(Mock_DATA[1]);
   };
 
   // takes in data from ISS cordinates , stores while client is at the site.
@@ -53,6 +53,7 @@ const dataStore = (function () {
     mapCoordinates,
     longitude,
     latitude,
+    date = [2013, 12, 24],
     degrees = 0.1) {
     const locationObject = {
       id: dataStore.requestId,
@@ -61,7 +62,7 @@ const dataStore = (function () {
       mapCoordinates,
       longitude,
       latitude,
-      date: null,
+      date,
       photoExists: true,
       imageUrls: []
     };
