@@ -9,16 +9,26 @@ const events = (function () {
   const getfirstImage = function () {
     $('.button-container').on('click', '.js-get-data', function () {
       let id;
+      let location;
+    
       return api.getISSdata()
         .then(data => dataStore.getCoordinates(data))
         .then(_id => {
           id = _id;
-          const location = dataStore.findLocationById(id);
+          location = dataStore.findLocationById(id);
           const coors = location.nasaCoordinates;
           return api.getNasaImage(coors);
         })
         .then((data) => nasaImageToDom(data, id))
-        .catch(err => console.log(err));
+        .catch(err => {
+          console.log(err);
+          nasaImageToDom(err, id);
+          const coors = location.mapCoordinates;
+          return api.getMapData(coors, 4)
+            .then(data => mapToDom(data))
+            .catch(err => console.log(err));
+            // TODO CLEAN THIS NAVIGATE ALL DOM map 200s through the maptodom
+        });
     });
   };
 
@@ -52,6 +62,10 @@ const events = (function () {
     });
   };
 
+  const mapToDom = (data) => $('.map-results').html(`<img src='${data}' alt='what'>`);
+
+
+
   const getMap = function () {
     $('.nasa-results').on('click', '.matching-map', function () {
       const id = parseInt($('.matching-map').siblings('img.satellite').attr('value'));
@@ -66,7 +80,6 @@ const events = (function () {
   };
 
   const nasaImageToDom = function (data, id) {
-    console.log(data, id);
     const location = dataStore.findLocationById(id);
     const longitude = location.longitude;
     const latitude = location.latitude;

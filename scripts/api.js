@@ -17,9 +17,9 @@ const api = (function () {
     return $.getJSON(`${NASA_URL}${coordinates}&date=${date}&dim=.05&${NASA_API_KEY}`, callback);
   };
 
-  const getMapData = (coordinates) => {
+  const getMapData = (coordinates, zoom = 5) => {
     return fetch(
-      `${MAP_URL}${coordinates}&zoom=5&size=800,600&defaultMarker=flag-009900-ISS-sm`)
+      `${MAP_URL}${coordinates}&zoom=${zoom}&size=800,600&defaultMarker=flag-009900-ISS-sm`)
       .then(res => {
         if (!res.ok) {
           return Promise.reject(res.statusText);
