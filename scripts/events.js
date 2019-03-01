@@ -7,28 +7,34 @@ const events = (function () {
   // give button a couple second timeout
 
   const getfirstImage = function () {
-    $('.button-container').on('click', '.js-get-data', function () {
-      let id;
-      let location;
-      return api.getISSdata()
-        .then(data => dataStore.getCoordinates(data))
-        .then(_id => {
-          id = _id;
-          location = dataStore.findLocationById(id);
-          const coors = location.nasaCoordinates;
-          return api.getNasaImage(coors);
-        })
-        .then((data) => nasaImageToDom(data, id))
-        .catch(err => {
-          console.log(err);
-          nasaImageToDom(err, id);
-          const coors = location.mapCoordinates;
-          return api.getMapData(coors, 4)
-            .then(data => mapToDom(data, id))
-            .catch(err => console.log(err));
-          // TODO CLEAN THIS NAVIGATE ALL DOM map 200s through the maptodom
+    $('.button-container')
+      .on('click',
+        '.js-get-data',
+        function () {
+          let id;
+          let location;
+          return api.getISSdata()
+            .then(data => dataStore.getCoordinates(data))
+            .then(_id => {
+              id = _id;
+              location =
+                dataStore.findLocationById(id);
+              const coors =
+                location.nasaCoordinates;
+              return api.getNasaImage(coors);
+            })
+            .then((data) => nasaImageToDom(data, id))
+            .catch(err => {
+              console.log(err);
+              nasaImageToDom(err, id);
+              // TODO error immage;
+              const coors =
+                location.mapCoordinates;
+              return api.getMapData(coors, 4)
+                .then(data => mapToDom(data, id))
+                .catch(err => console.log(err));
+            });
         });
-    });
   };
 
   const getEarlierImage = () => {
@@ -76,19 +82,34 @@ const events = (function () {
     });
   };
 
-  const zoomInOnMap = () => {
+  const adjustZoomOnMap = () => {
     let id;
-    $('.map-results').on('click', '.zoom-in', function () {
-      const _id = parseInt($('.zoom-in').siblings('img.map').attr('value'));
-      id = _id;
-      const location = dataStore.findLocationById(id);
-      const coors = location.mapCoordinates;
-      const zoom = location.mapZoom + 1;
-      location.mapZoom = zoom;
-      return api.getMapData(coors, zoom)
-        .then((data) => mapToDom(data, id))
-        .catch(err => console.log(err));
-    });
+    let zoom;
+    $('.map-results')
+      .on('click',
+        '.zoom-adjust',
+        function () {
+          const _id = parseInt(
+            $('.zoom-adjust')
+              .siblings('img.map')
+              .attr('value'));
+          const _zoom = parseInt(
+            $('.zoom-adjust')
+              .siblings('input.zoom-range')
+              .val());
+          id = _id;
+          zoom = _zoom + 2;
+          const location =
+            dataStore.findLocationById(id);
+          const coors =
+            location.mapCoordinates;
+          if (zoom === location.mapZoom)
+            return; // TODO show CSS stopp, flash red shadow
+          location.mapZoom = zoom;
+          return api.getMapData(coors, zoom)
+            .then((data) => mapToDom(data, id))
+            .catch(err => console.log(err));
+        });
   };
 
 
@@ -96,13 +117,34 @@ const events = (function () {
     const location = dataStore.findLocationById(id);
     const longitude = location.longitude;
     const latitude = location.latitude;
+    const zoom = location.mapZoom - 2;
     $('.map-results').html(`
     <img class='map' value=${id} src='${data}' alt='map of the image to the left'>
     <p>Longitude: ${longitude}, Latitude: ${latitude}</p>
     <span>Get this location as a photo!</span><button class='matching-image'>Get!</button><br>
-    <button class='zoom-out'>Zoom out</button>
-    <button class='zoom-in'>Zoom in</button>
-    
+    <p>Resolution</p>
+    <label for="Adjust">Adjust</label>  
+    <input type="range" class="zoom-range" name="Adjust" list='tickmarks' value='${zoom}'
+    min="1" max="15">
+    <datalist id="tickmarks">
+       <option value="1" label="1%">
+       <option value="2">
+       <option value="3">
+       <option value="4">
+       <option value="5" label="5">
+       <option value="6">
+       <option value="7">
+       <option value="8">
+       <option value="9">
+       <option value="10" label="10">
+       <option value="11">
+       <option value="12">
+       <option value="13">
+       <option value="14">
+       <option value="15" label="15">
+    </datalist>
+    <br>
+    Retrieve <button class='zoom-adjust'>Get New Map</button>
     `);
   };
 
@@ -145,7 +187,7 @@ const events = (function () {
     getMap();
     getEarlierImage();
     getLaterImage();
-    zoomInOnMap();
+    adjustZoomOnMap();
     addFakeData();
 
   };

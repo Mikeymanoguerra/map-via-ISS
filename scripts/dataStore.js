@@ -17,12 +17,25 @@ const dataStore = (function () {
     },
     {
       id: 9,
+      nasaCoordinates: 'lon=-122.4194&lat=37.7749',
+      mapCoordinates: '37.7749,-122.4194',
+      degrees: 0.01,
+      longitude: -122.4194,
+      latitude: 37.7749,
+      date: [2013, 12, 24],
+      mapZoom: 5,
+      photoExists: true,
+      imageUrls: ['https://earthengine.googleapis.com/api/thumb?thumbid=bc9b6d19904dfffe9e45271e308630ba&token=f0aee8f19cfd7d48dbd4a257fa9f181f']
+    },
+    {
+      id: 10,
       nasaCoordinates: 'lon=75.1652&lat=39.9526',
       mapCoordinates: '39.9526,75.1652',
       degrees: 0.01,
       longitude: 75.1652,
       latitude: 39.9526,
       date: [2013, 12, 24],
+      mapZoom: 5,
       photoExists: true,
       imageUrls: ['https://earthengine.googleapis.com/api/thumb?thumbid=bc9b6d19904dfffe9e45271e308630ba&token=f0aee8f19cfd7d48dbd4a257fa9f181f']
     },

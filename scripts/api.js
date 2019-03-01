@@ -25,7 +25,7 @@ const api = (function () {
       `${MAP_URL}
       ${coordinates}
       &zoom=${zoom}
-      &size=800,600
+      &size=800,800
       &defaultMarker=flag-009900-ISS-sm`)
       .then(res => {
         if (!res.ok) {
