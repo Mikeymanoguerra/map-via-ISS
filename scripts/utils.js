@@ -1,6 +1,4 @@
 'use strict';
-
-
 const utils = (function () {
 
   const getCurrentDateArray = () => {
@@ -10,7 +8,7 @@ const utils = (function () {
     let date = today.getDate();
     return [year, month, date];
   };
-  
+
   const goBackInTimeOneMonth = (dateArray) => {
     const monthMinusOne = dateArray.map((n, index) => {
       return index === 1 ? n - 1 : n;
@@ -24,7 +22,7 @@ const utils = (function () {
       return yearAdjustedArray;
     } else return monthMinusOne;
   };
-  
+
   const goForwardInTimeOneMonth = (dateArray) => {
     const monthPlusOne = dateArray.map((n, index) => {
       return index === 1 ? n + 1 : n;
@@ -38,7 +36,7 @@ const utils = (function () {
       return yearAdjustedArray;
     } else return monthPlusOne;
   };
-  
+
   const dateToHyphenString = (dateArray) => {
     let year = dateArray[0];
     let month = dateArray[1];
@@ -55,7 +53,7 @@ const utils = (function () {
     }
     return `${year}-${month}-${date}`;
   };
-  
+
   return {
     getCurrentDateArray,
     goBackInTimeOneMonth,

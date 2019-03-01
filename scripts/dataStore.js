@@ -63,6 +63,7 @@ const dataStore = (function () {
       longitude,
       latitude,
       date,
+      mapZoom : 5,
       photoExists: true,
       imageUrls: []
     };
@@ -81,12 +82,7 @@ const dataStore = (function () {
     });
   };
 
-  // Any functions that deal with looking back and forth in time for nasa data, and degrees of photo go here
-  // 
-
-
   return {
-
     state: [],
     requestId: 10,
     getCoordinates,
