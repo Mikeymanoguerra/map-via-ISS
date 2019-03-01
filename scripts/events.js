@@ -144,7 +144,7 @@ const events = (function () {
        <option value="15" label="15">
     </datalist>
     <br>
-    Retrieve <button class='zoom-adjust'>Get New Map</button>
+    <span>Retrieve </span><button class='zoom-adjust'>Get New Map</button>
     `);
   };
 

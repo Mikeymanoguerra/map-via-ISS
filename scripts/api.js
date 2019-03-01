@@ -6,6 +6,7 @@ const api = (function () {
   // TODO config file
   // TODO use those coordinates to determine if over land or water on water API
   // TODO use IP address of user to get dead reckoning or something
+  // TODO better icon
   const ISS_URL =
     'http://api.open-notify.org/iss-now.json?callback=?';
   const NASA_URL =
@@ -22,11 +23,8 @@ const api = (function () {
 
   const getMapData = (coordinates, zoom = 5) => {
     return fetch(
-      `${MAP_URL}
-      ${coordinates}
-      &zoom=${zoom}
-      &size=800,800
-      &defaultMarker=flag-009900-ISS-sm`)
+      `${MAP_URL}${coordinates}|https://res.cloudinary.com/dgzjr8afn/image/upload/v1551466429/ISS-SMALL.png&zoom=${zoom}&size=800,800`)
+      // &defaultMarker=flag-009900-ISS-sm
       .then(res => {
         if (!res.ok) {
           return Promise.reject(res.statusText);
