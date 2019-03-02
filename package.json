@@ -1,0 +1,26 @@
+{
+  "name": "issapp",
+  "version": "1.0.0",
+  "description": "sadelitte",
+  "main": "scratch.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Mikeymanoguerra/map-via-ISS.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Mikeymanoguerra/map-via-ISS/issues"
+  },
+  "homepage": "https://github.com/Mikeymanoguerra/map-via-ISS#readme",
+  "dependencies": {
+    "jquery": "^3.3.1",
+    "webpack": "^4.29.6"
+  },
+  "devDependencies": {
+    "webpack-cli": "^3.2.3"
+  }
+}
