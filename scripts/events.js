@@ -112,7 +112,6 @@ const events = (function () {
         });
   };
 
-
   const mapToDom = (data, id) => {
     const location = dataStore.findLocationById(id);
     const longitude = location.longitude;
@@ -123,9 +122,11 @@ const events = (function () {
     <p>Longitude: ${longitude}, Latitude: ${latitude}</p>
     <span>Get this location as a photo!</span><button class='matching-image'>Get!</button><br>
     <p>Resolution</p>
-    <label for="Adjust">Adjust</label>  
+    <label for="Adjust">Adjust</label> <br>
+    <span> Zoom out </span> 
     <input type="range" class="zoom-range" name="Adjust" list='tickmarks' value='${zoom}'
     min="1" max="15">
+    <span> Zoom in </span> 
     <datalist id="tickmarks">
        <option value="1" label="1%">
        <option value="2">
@@ -189,7 +190,6 @@ const events = (function () {
     getLaterImage();
     adjustZoomOnMap();
     addFakeData();
-
   };
   // Bind event listeners
   return {
