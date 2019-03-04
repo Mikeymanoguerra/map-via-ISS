@@ -1,6 +1,4 @@
 
-window.store = (function () {
-
   const Mock_DATA = [
     {
       id: 8,
@@ -46,7 +44,6 @@ window.store = (function () {
     return getCoordinates(data);
   };
 
-
   // takes in data from ISS cordinates , stores while client is at the site.
   const getCoordinates = function (data) {
     const latitude = data['iss_position'].latitude;
@@ -68,8 +65,7 @@ window.store = (function () {
     mapCoordinates,
     longitude,
     latitude,
-    date = [2013, 12, 24],
-    zoomInDegrees = 0.1) {
+    zoomInDegrees = 0.05) {
     const locationObject = {
       id: store.requestId,
       nasaCoordinates,
@@ -77,9 +73,7 @@ window.store = (function () {
       mapCoordinates,
       longitude,
       latitude,
-      date,
-      mapZoom: 5,
-      imageId: 1,
+      imageIdCount: 1,
       successfulResponses: []
     };
     return locationObject;
@@ -98,34 +92,34 @@ window.store = (function () {
   };
 
   const checkForExistingSuccessfulResponse = (storeId, userRequest) => {
-    const successfulResponses = findLocationById(storeId).successfulResponses;
+  const locationObject = findLocationById(storeId);
     if (userRequest.mapOrSatellite === 'map') {
-      return successfulResponses.filter(img =>
-        img.mapZoom === userRequest.mapZoom);
+      return locationObject.successfulResponses.filter( item =>
+        item.mapZoom === userRequest.mapZoom);
     }
     if (userRequest.mapOrSatellite === 'satellite') {
-      return successfulResponses.filter(img =>
-        img.dateArray === userRequest.zoomInDegrees
+      return locationObject.successfulResponses.filter(item =>
+        item.dateArray === userRequest.dateArray
+        // this will never work;
       );
     }
   };
 
   const getExistingSuccessfulResponse = (storeId, imageId) => {
-
     const locationObject = findLocationById(storeId);
     return locationObject.successfulResponses.filter(img =>
       img.imageId === imageId);
   };
 
   const handleResponseStorage = (storeId, responseData) => {
-
+    
     const locationObject = findLocationById(storeId);
-    let newImageId = locationObject.imageId;
-    locationObject.imageId++;
+    let imageId = locationObject.imageIdCount;
+    locationObject.imageIdCount++;
     if (responseData.mapOrSatellite === 'map') {
       const { mapOrSatellite, url, mapZoom } = responseData;
-      newResponseObject = {
-        newImageId,
+      let newResponseObject = {
+        imageId,
         mapOrSatellite,
         url,
         mapZoom,
@@ -134,8 +128,8 @@ window.store = (function () {
     }
     if (responseData.mapOrSatellite === 'satellite') {
       const { mapOrSatellite, url, dateArray, zoomInDegrees } = responseData;
-      newResponseObject = {
-        newImageId,
+       let newResponseObject = {
+        imageId,
         mapOrSatellite,
         url,
         dateArray,
@@ -143,11 +137,9 @@ window.store = (function () {
       };
       return addApiResponseToLocationObject(storeId, newResponseObject);
     };
-
   };
 
   const addApiResponseToLocationObject = (storeId, newResponseObj) => {
-
     const locationObject = findLocationById(storeId);
     locationObject.successfulResponses = [
       ...locationObject.successfulResponses,
@@ -156,7 +148,7 @@ window.store = (function () {
     return newResponseObj;
   };
 
-  return {
+  export const store = {
     state: [],
     requestId: 10,
     getCoordinates,
@@ -169,5 +161,5 @@ window.store = (function () {
     getExistingSuccessfulResponse,
   };
 
-}());
+
 

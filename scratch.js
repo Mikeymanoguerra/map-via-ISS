@@ -172,3 +172,17 @@ console.log(dateToString(jan), dateToString(feb));
 // //     </datalist>
 // //                         <br>
 // //                           <span>Retrieve </span><button class='nasa-zoom-adjust'>Get New Image</button>`
+
+/*
+right path but fail
+if (userRequest.mapOrSatellite === 'satellite') {
+  return locationObject.successfulResponses.find(item => {
+    for (let i = 0; i < item.dateArray.length; i++) {
+      if (item.dateArray[i] !== userRequest.dateArray[i])
+        return false;
+    }
+  });
+ 
+}
+
+*/

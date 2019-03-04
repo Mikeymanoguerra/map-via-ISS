@@ -1,5 +1,7 @@
 
 import { utils } from './utils';
+import { store } from './store';
+import { api } from './api';
 
 function getlocationObjectFromStore(storeId) {
   return store.findLocationById(storeId);
@@ -9,14 +11,41 @@ function handleDateManipulation(dateArray, direction) {
   if (direction === 1) {
     const moreRecentDate =
       utils.goForwardInTimeOneMonth(dateArray);
-    return utils.dateToHyphenString(moreRecentDate);
+    const newDateString = utils.dateToHyphenString(moreRecentDate);
+    return [moreRecentDate, newDateString];
   }
   else {
     const fartherBackDate =
       utils.goBackInTimeOneMonth(dateArray);
-    return utils.dateToHyphenString(fartherBackDate);
+    const newDateString = utils.dateToHyphenString(fartherBackDate);
+    return [fartherBackDate, newDateString];
   }
 }
+
+const getNewMapImage = function () {
+  $('.button-container')
+    .on('click', '.js-get-map', function () {
+      let storeId;
+      return api.getISSdata()
+        .then(data => store.getCoordinates(data))
+        .then(_id => {
+          storeId = _id;
+          const { mapCoordinates } = getlocationObjectFromStore(storeId);
+          return api.getMapData(mapCoordinates, 5)
+            .then(url => {
+              const responseData = {
+                mapOrSatellite: 'map',
+                url,
+                mapZoom: 5
+              };
+              const newResponseObject =
+                store.handleResponseStorage(storeId, responseData);
+              return mapToDom(storeId, newResponseObject);
+            })
+            .catch(err => console.log(err));
+        });
+    });
+};
 
 const getNewSatelliteImage = function () {
   $('.button-container')
@@ -37,6 +66,7 @@ const getNewSatelliteImage = function () {
             dateArray,
             zoomInDegrees: .05
           };
+          debugger;
 
           const newResponseObject = store.handleResponseStorage(storeId, responseData);
           return nasaImageToDom(storeId, newResponseObject);
@@ -61,7 +91,6 @@ const getNewSatelliteImage = function () {
         });
     });
 };
-
 
 function getStoreAndImageIds(event) {
 
@@ -96,24 +125,26 @@ const getLaterImage = () => {
 };
 
 function handleTimeTraversal(storeId, userRequest, direction) {
+  const [previousSuccess] = store.getExistingSuccessfulResponse(storeId, userRequest.imageId);
+  const { dateArray } = previousSuccess;
+  let [newDateArray, dateString] = handleDateManipulation(dateArray, direction);
+  const userRequestWithDate = Object.assign({}, userRequest, {
+    dateArray: newDateArray
+  });
   const [existingAsset] =
-    store.checkForExistingSuccessfulResponse(storeId, userRequest);
+    store.checkForExistingSuccessfulResponse(storeId, userRequestWithDate);
   if (existingAsset) {
     console.log('Got this image from local storage');
     return nasaImageToDom(storeId, existingAsset);
     //  if imageId == current image ID, css notice.
   }
-  const [previousSuccess] = store.getExistingSuccessfulResponse(storeId, userRequest.imageId);
-  const { dateArray } = previousSuccess;
-  const { dateString } = handleDateManipulation(dateArray, direction);
   const { nasaCoordinates } = getlocationObjectFromStore(storeId);
   return api.getNasaImage(nasaCoordinates, dateString)
     .then((res) => {
-      const dateArray = utils.dateArrayFromString(res.date);
       const responseData = {
         mapOrSatellite: 'satellite',
         url: res.url,
-        dateArray,
+        dateArray: [...newDateArray],
         zoomInDegrees: .05
       };
       const newResponseObject = store.handleResponseStorage(storeId, responseData);
@@ -122,6 +153,28 @@ function handleTimeTraversal(storeId, userRequest, direction) {
     .catch(err => console.log(err));
 };
 
+function getmatchingSatelliteImage() {
+  $('.map-results').on('click', '.matching-image', function () {
+    const storeId = parseInt($(this).siblings('img.map-image').attr('value'));
+    const { nasaCoordinates } = getlocationObjectFromStore(storeId);
+    return api.getNasaImage(nasaCoordinates)
+      .then((res) => {
+        const dateArray = utils.dateArrayFromString(res.date);
+        const responseData = {
+          mapOrSatellite: 'satellite',
+          url: res.url,
+          dateArray,
+          zoomInDegrees: .05
+        };
+
+        const newResponseObject = store.handleResponseStorage(storeId, responseData);
+        return nasaImageToDom(storeId, newResponseObject);
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  });
+};
 const getMatchingMap = function () {
   $('.nasa-results').on('click', '.matching-map', function () {
     const storeId = parseInt($('.matching-map').siblings('img.nasa-map-image').attr('value'));
@@ -231,6 +284,8 @@ const nasaImageToDom = function (storeId, newResponseObject) {
     longitude,
     latitude,
   } = store.findLocationById(storeId);
+  console.log(newResponseObject);
+
   const htmlString = `
     <img class='nasa-map-image'
     value=${storeId} id=${imageId}
@@ -251,7 +306,7 @@ const addFakeData = function () {
       .then((res) => {
         const dateArray = utils.dateArrayFromString(res.date);
         const responseData = {
-          isSatelliteImage: 'satellite',
+          mapOrSatellite: 'satellite',
           url: res.url,
           dateArray,
           zoomInDegrees: .05
@@ -272,7 +327,9 @@ const addFakeData = function () {
 
 const bindEventListeners = () => {
   getNewSatelliteImage();
+  getNewMapImage();
   getMatchingMap();
+  getmatchingSatelliteImage();
   getEarlierImage();
   getLaterImage();
   adjustZoomOnMap();
