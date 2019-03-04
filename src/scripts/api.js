@@ -3,7 +3,6 @@
 // TODO use those coordinates to determine if over land or water on water API
 // TODO use IP address of user to get dead reckoning or something
 // TODO better icon
-// TODO get rid of window. calls
 const ISS_URL =
   'http://api.open-notify.org/iss-now.json?callback=?';
 const NASA_URL =

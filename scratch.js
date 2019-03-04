@@ -1,75 +1,44 @@
 
-const getCurrentDateArray = () => {
-  const today = new Date();
-  let year = today.getFullYear();
-  let month = today.getMonth() + 1;
-  let date = today.getDate();
-  return [year, month, date];
-};
+/*
+const Mock_DATA = [
+  {
+    id: 8,
+    nasaCoordinates: 'lon=32.1453&lat=-17.8883',
+    degrees: 0.01,
+    mapCoordinates: '-17.8883,32.1453',
+    longitude: 32.1453,
+    latitude: -17.8883,
+    date: null,
+    photoExists: true,
+    imageUrls: []
+  },
+  {
+    id: 9,
+    nasaCoordinates: 'lon=-122.4194&lat=37.7749',
+    mapCoordinates: '37.7749,-122.4194',
+    degrees: 0.01,
+    longitude: -122.4194,
+    latitude: 37.7749,
+    date: [2013, 12, 24],
+    mapZoom: 5,
+    photoExists: true,
+    imageUrls: ['https://earthengine.googleapis.com/api/thumb?thumbid=bc9b6d19904dfffe9e45271e308630ba&token=f0aee8f19cfd7d48dbd4a257fa9f181f']
+  },
+  {
+    id: 10,
+    nasaCoordinates: 'lon=75.1652&lat=39.9526',
+    mapCoordinates: '39.9526,75.1652',
+    degrees: 0.01,
+    longitude: 75.1652,
+    latitude: 39.9526,
+    date: [2013, 12, 24],
+    mapZoom: 5,
+    photoExists: true,
+    imageUrls: ['https://earthengine.googleapis.com/api/thumb?thumbid=bc9b6d19904dfffe9e45271e308630ba&token=f0aee8f19cfd7d48dbd4a257fa9f181f']
+  },
 
-const theDate = "2013-12-28T18:47:30";
-
-function dateFromString(dateTimeString) {
-  const dateOnlyString = dateTimeString.slice(0, 10);
-  const dateStringArray = dateOnlyString.split('-');
-  const dateArray = dateStringArray.map(num => parseInt(num));
-  return dateArray;
-}
-
-console.log(dateFromString(theDate));
-
-const goBackInTimeOneMonth = (dateArray) => {
-  const monthMinusOne = dateArray.map((n, index) => {
-    return index === 1 ? n - 1 : n;
-  });
-  if (monthMinusOne[1] === 0) {
-    const yearAdjustedArray = monthMinusOne.map((n, index) => {
-      if (index === 0) { return n - 1; }
-      if (index === 1) { return n = 12; }
-      else return n;
-    });
-    return yearAdjustedArray;
-  } else return monthMinusOne;
-};
-
-const goForwardInTimeOneMonth = (dateArray) => {
-  const monthPlusOne = dateArray.map((n, index) => {
-    return index === 1 ? n + 1 : n;
-  });
-  if (monthPlusOne[1] === 13) {
-    const yearAdjustedArray = monthPlusOne.map((n, index) => {
-      if (index === 0) { return n + 1; }
-      if (index === 1) { return n = 1; }
-      else return n;
-    });
-    return yearAdjustedArray;
-  } else return monthPlusOne;
-};
-
-const dateToString = (dateArray) => {
-  let year = dateArray[0];
-  let month = dateArray[1];
-  let date = dateArray[2];
-  if (month < 10) {
-    month = `0${month}`;
-  }
-  if (date < 10) {
-    date = `0${date}`;
-  }
-  // TODO actual date handling by month
-  if (date > 28) {
-    date = 28;
-  }
-  return `${year}-${month}-${date}`;
-};
-const today = getCurrentDateArray();
-const january = goBackInTimeOneMonth(today);
-const december = goBackInTimeOneMonth(january);
-const jan = goForwardInTimeOneMonth(december);
-const feb = goForwardInTimeOneMonth(jan);
-
-console.log(dateToString(jan), dateToString(feb));
-
+];
+*/
 
 // const newCollectedLocation = {
 //   id,
