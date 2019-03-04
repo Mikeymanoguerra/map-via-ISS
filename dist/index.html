@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet" href="index.css">
+  <title>Views via ISS</title>
+</head>
+
+<body>
+  <div class="api-container">
+    <div class="spacecraft-container">
+      <img class='satellite-img'
+        src='https://res.cloudinary.com/dgzjr8afn/image/upload/v1551025367/x8gp8kmvzetyi1lddfnc.png'
+        alt='Landsat8 the Satellite that takes the photos' />
+      <img class='satellite-img'
+        src='https://res.cloudinary.com/dgzjr8afn/image/upload/v1550877377/international-space-station-transparent-background.png'
+        alt='the space station, obliquely from above'>
+    </div>
+    <h1 class="title">Views via ISS</h1>
+    <div class="action-container">
+      <div class="button-container">
+        <button class="js-get-data">Get a Satellite Photo</button>
+        <button class="test-data">USE TEST DATA</button>
+        <button class="map">MAP</button>
+      </div>
+      <div id='results-container'>
+        <div class="nasa-results"></div>
+        <div class="map-results"></div>
+      </div>
+    </div>
+  </div>
+  <script type="text/javascript" src="./main.js"></script>
+</body>
+
+</html>

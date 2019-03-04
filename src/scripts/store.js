@@ -40,8 +40,12 @@ window.store = (function () {
 
   ];
   const seedData = function () {
-    pushToArray(Mock_DATA[1]);
+    data = {
+      iss_position: { longitude: "-122.4194", latitude: "37.7749" }
+    };
+    return getCoordinates(data);
   };
+
 
   // takes in data from ISS cordinates , stores while client is at the site.
   const getCoordinates = function (data) {
@@ -65,18 +69,18 @@ window.store = (function () {
     longitude,
     latitude,
     date = [2013, 12, 24],
-    degrees = 0.1) {
+    zoomInDegrees = 0.1) {
     const locationObject = {
       id: store.requestId,
       nasaCoordinates,
-      degrees,
+      zoomInDegrees,
       mapCoordinates,
       longitude,
       latitude,
       date,
-      mapZoom : 5,
-      photoExists: true,
-      imageUrls: []
+      mapZoom: 5,
+      imageId: 1,
+      successfulResponses: []
     };
     return locationObject;
   };
@@ -86,11 +90,70 @@ window.store = (function () {
   };
 
   const findLocationById = function (id) {
-    return this.state.find(location => {
+    return store.state.find(location => {
       if (id === location.id) {
         return location;
       }
     });
+  };
+
+  const checkForExistingSuccessfulResponse = (storeId, userRequest) => {
+    const successfulResponses = findLocationById(storeId).successfulResponses;
+    if (userRequest.mapOrSatellite === 'map') {
+      return successfulResponses.filter(img =>
+        img.mapZoom === userRequest.mapZoom);
+    }
+    if (userRequest.mapOrSatellite === 'satellite') {
+      return successfulResponses.filter(img =>
+        img.dateArray === userRequest.zoomInDegrees
+      );
+    }
+  };
+
+  const getExistingSuccessfulResponse = (storeId, imageId) => {
+
+    const locationObject = findLocationById(storeId);
+    return locationObject.successfulResponses.filter(img =>
+      img.imageId === imageId);
+  };
+
+  const handleResponseStorage = (storeId, responseData) => {
+
+    const locationObject = findLocationById(storeId);
+    let newImageId = locationObject.imageId;
+    locationObject.imageId++;
+    if (responseData.mapOrSatellite === 'map') {
+      const { mapOrSatellite, url, mapZoom } = responseData;
+      newResponseObject = {
+        newImageId,
+        mapOrSatellite,
+        url,
+        mapZoom,
+      };
+      return addApiResponseToLocationObject(storeId, newResponseObject);
+    }
+    if (responseData.mapOrSatellite === 'satellite') {
+      const { mapOrSatellite, url, dateArray, zoomInDegrees } = responseData;
+      newResponseObject = {
+        newImageId,
+        mapOrSatellite,
+        url,
+        dateArray,
+        zoomInDegrees
+      };
+      return addApiResponseToLocationObject(storeId, newResponseObject);
+    };
+
+  };
+
+  const addApiResponseToLocationObject = (storeId, newResponseObj) => {
+
+    const locationObject = findLocationById(storeId);
+    locationObject.successfulResponses = [
+      ...locationObject.successfulResponses,
+      newResponseObj
+    ];
+    return newResponseObj;
   };
 
   return {
@@ -100,7 +163,10 @@ window.store = (function () {
     pushToArray,
     findLocationById,
     Mock_DATA,
-    seedData
+    seedData,
+    handleResponseStorage,
+    checkForExistingSuccessfulResponse,
+    getExistingSuccessfulResponse,
   };
 
 }());
