@@ -108,9 +108,14 @@ const addApiResponseToLocationObject = (storeId, newResponseObj) => {
   return newResponseObj;
 };
 
+const handleSecretFormToggle = () => {
+  store.secretForm = !store.secretForm;
+};
+
 export const store = {
   state: [],
   requestId: 10,
+  secretForm: false,
   getCoordinates,
   pushToArray,
   findLocationById,
@@ -118,7 +123,7 @@ export const store = {
   handleResponseStorage,
   checkForExistingSuccessfulResponse,
   getExistingSuccessfulResponse,
-};
+  handleSecretFormToggle
 
 
 

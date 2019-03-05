@@ -299,6 +299,13 @@ const addFakeData = function () {
   });
 };
 
+const toggleCoordinateForm = function () {
+  $('.button-container').on('click', '.form-toggle', function () {
+    store.handleSecretFormToggle();
+    // RENDER()
+  });
+};
+
 const bindEventListeners = () => {
   getNewSatelliteImage();
   getNewMapImage();
@@ -308,6 +315,7 @@ const bindEventListeners = () => {
   getLaterImage();
   adjustZoomOnMap();
   addFakeData();
+  toggleCoordinateForm();
 };
 
 export const events = {
