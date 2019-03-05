@@ -86,6 +86,8 @@ function handleTimeTraversal(storeId, userRequest, direction) {
   const userRequestWithDate = Object.assign({}, userRequest, {
     dateArray: newDateArray
   });
+
+  // TODO, Pull below code out
   const [existingAsset] =
     store.checkForExistingSuccessfulResponse(storeId, userRequestWithDate);
   if (existingAsset) {
@@ -106,7 +108,7 @@ function handleTimeTraversal(storeId, userRequest, direction) {
       return nasaImageToDom(storeId, newResponseObject);
     })
     .catch(err => console.log(err));
-};
+}
 
 const getEarlierImage = () => {
   $('.nasa-results').on('click', '.go-back', function (event) {
@@ -141,8 +143,6 @@ const nasaImageToDom = function (storeId, newResponseObject) {
     longitude,
     latitude,
   } = store.findLocationById(storeId);
-  console.log(newResponseObject);
-
   const htmlString = `
     <img class='nasa-map-image'
     value=${storeId} id=${imageId}
@@ -164,7 +164,7 @@ function handleMapResponse(storeId, url, mapZoom = 5) {
   const newResponseObject =
     store.handleResponseStorage(storeId, responseData);
   return newResponseObject;
-};
+}
 
 function getZoomValueAndStoreId(event) {
   const storeId = parseInt(
@@ -176,12 +176,11 @@ function getZoomValueAndStoreId(event) {
       .siblings('input.map-zoom-range')
       .val());
   return [
-    storeId,
-    {
+    storeId, {
       mapOrSatellite: 'map',
       mapZoom: mapZoom + 2,
     }];
-};
+}
 
 const getNewMapImage = function () {
   $('.button-container')
@@ -238,7 +237,7 @@ function getMatchingSatelliteImage() {
         console.log(err);
       });
   });
-};
+}
 
 const mapToDom = (storeId, newResponseObject) => {
   const {
