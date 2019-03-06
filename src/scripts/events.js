@@ -1,7 +1,11 @@
+/* eslint-disable no-undef */
+/* eslint-disable no-console,  */
+
 
 import { utils } from './utils';
 import { store } from './store';
 import { api } from './api';
+// import { secretCoordinateForm } from './secret-coordinate-form';
 
 function getlocationObjectFromStore(storeId) {
   return store.findLocationById(storeId);
@@ -299,12 +303,7 @@ const addFakeData = function () {
   });
 };
 
-const toggleCoordinateForm = function () {
-  $('.button-container').on('click', '.form-toggle', function () {
-    store.handleSecretFormToggle();
-    // RENDER()
-  });
-};
+
 
 const bindEventListeners = () => {
   getNewSatelliteImage();
@@ -315,7 +314,7 @@ const bindEventListeners = () => {
   getLaterImage();
   adjustZoomOnMap();
   addFakeData();
-  toggleCoordinateForm();
+
 };
 
 export const events = {

@@ -26,7 +26,7 @@ h1{
   flex-wrap: wrap;
 
 }
-.map-results, .nasa-results{
+.map-results, .nasa-results, .form-results{
   min-width: 500px;
   min-height: 750px;
   padding: 10px;
