@@ -99,13 +99,32 @@ const handleResponseStorage = (storeId, responseData) => {
   }
 };
 
-const addApiResponseToLocationObject = (storeId, newResponseObj) => {
+const addApiResponseToLocationObject = (storeId, newResponseObject) => {
   const locationObject = findLocationById(storeId);
   locationObject.successfulResponses = [
     ...locationObject.successfulResponses,
-    newResponseObj
+    newResponseObject
   ];
-  return newResponseObj;
+  return updateCurrentDisplay(storeId, newResponseObject);
+};
+
+const updateCurrentDisplay = (storeId, newResponseObject) => {
+  if (newResponseObject.mapOrSatellite === 'map') {
+    store.currentDisplay = Object.assign({}, store.currentDisplay, {
+      currentMapOnDom: {
+        storeId,
+        imageId: newResponseObject.imageId
+      }
+    });
+  }
+  if (newResponseObject.mapOrSatellite === 'satellite') {
+    store.currentDisplay = Object.assign({}, store.currentDisplay, {
+      currentSatelliteOnDom: {
+        storeId,
+        imageId: newResponseObject.imageId
+      }
+    });
+  }
 };
 
 const handleSecretFormToggle = () => {
@@ -114,6 +133,7 @@ const handleSecretFormToggle = () => {
 
 export const store = {
   state: [],
+  currentDisplay: {},
   requestId: 10,
   secretForm: false,
   getCoordinates,
@@ -123,7 +143,8 @@ export const store = {
   handleResponseStorage,
   checkForExistingSuccessfulResponse,
   getExistingSuccessfulResponse,
-  handleSecretFormToggle
+  handleSecretFormToggle,
+  updateCurrentDisplay
 
 };
 

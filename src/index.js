@@ -9,6 +9,7 @@ window.$ = $;
 $(document).ready(function () {
   console.log('end');
   events.bindEventListeners();
+  events.render();
 });
 
 
