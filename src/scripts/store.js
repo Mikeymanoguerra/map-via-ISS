@@ -125,5 +125,5 @@ export const store = {
   getExistingSuccessfulResponse,
   handleSecretFormToggle
 
-}
+};
 
