@@ -193,19 +193,24 @@ function handleMapResponse(storeId, url, mapZoom = 5) {
   store.handleResponseStorage(storeId, responseData);
 }
 
+function handleISSRequest() {
+  return api.getISSdata()
+    .then(data => {
+      const storeId = store.parseCoordinatesAndGetStoreId(data);
+      return storeId;
+    });
+}
+
 const onIssBasedSatelliteImageRequest = function () {
   $('.button-container').on('click', '.js-get-data', function () {
-    let storeId;
-    return api.getISSdata()
-      .then(data => store.getCoordinates(data))
-      .then(_id => {
-        storeId = _id;
+    return handleISSRequest()
+      .then(storeId => {
         const { nasaCoordinates } = getlocationObjectFromStore(storeId);
-        return api.getNasaImage(nasaCoordinates);
-      })
-      .then((res) => {
-        handleNasaResponse(storeId, res);
-        return render();
+        return api.getNasaImage(nasaCoordinates)
+          .then((res) => {
+            handleNasaResponse(storeId, res);
+            return render();
+          });
       })
       .catch(err => {
 
@@ -266,22 +271,18 @@ function onRequestForMatchingSatelliteImage() {
 }
 
 const onIssBasedMapRequest = function () {
-  $('.button-container')
-    .on('click', '.js-get-map', function () {
-      let storeId;
-      return api.getISSdata()
-        .then(data => store.getCoordinates(data))
-        .then(_id => {
-          storeId = _id;
-          const { mapCoordinates } = getlocationObjectFromStore(storeId);
-          return api.getMapData(mapCoordinates, 5)
-            .then(url => {
-              handleMapResponse(storeId, url);
-              return render();
-            })
-            .catch(err => console.log(err));
-        });
-    });
+  $('.button-container').on('click', '.js-get-map', function () {
+    return handleISSRequest()
+      .then(storeId => {
+        const { mapCoordinates } = getlocationObjectFromStore(storeId);
+        return api.getMapData(mapCoordinates, 5)
+          .then(url => {
+            handleMapResponse(storeId, url);
+            return render();
+          })
+          .catch(err => console.log(err));
+      });
+  });
 };
 
 const onMapZoomAdjust = () => {

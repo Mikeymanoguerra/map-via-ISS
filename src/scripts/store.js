@@ -3,34 +3,24 @@ const seedData = function () {
   const data = {
     iss_position: { longitude: "-122.4194", latitude: "37.7749" }
   };
-  return getCoordinates(data);
+  return parseCoordinatesAndGetStoreId(data);
 };
 
-const getCoordinates = function (data) {
-  const latitude = data['iss_position'].latitude;
-  const longitude = data['iss_position'].longitude;
+
+const buildCoordinateStrings = (responseData) => {
+  const latitude = responseData['iss_position'].latitude;
+  const longitude = responseData['iss_position'].longitude;
   const nasaCoordinates = `lon=${longitude}&lat=${latitude}`;
   const mapCoordinates = `${latitude},${longitude}`;
-  const freshlocation = buildLocationObject(
-    nasaCoordinates,
-    mapCoordinates,
-    latitude,
-    longitude);
-  pushToArray(freshlocation);
-  store.requestId++;
-  return freshlocation.id;
+  return [latitude, longitude, nasaCoordinates, mapCoordinates];
 };
 
-const buildLocationObject = function (
-  nasaCoordinates,
-  mapCoordinates,
-  longitude,
-  latitude,
-  zoomInDegrees = 0.05) {
+const buildLocationObject = function (coordinateStringArray) {
+  const [latitude, longitude, nasaCoordinates, mapCoordinates] = coordinateStringArray;
   const locationObject = {
-    id: store.requestId,
+    storeId: store.requestId,
     nasaCoordinates,
-    zoomInDegrees,
+    zoomInDegrees: 0.05,
     mapCoordinates,
     longitude,
     latitude,
@@ -40,19 +30,30 @@ const buildLocationObject = function (
   return locationObject;
 };
 
+const parseCoordinatesAndGetStoreId = function (responseData) {
+  const coordinateStringArray = buildCoordinateStrings(responseData);
+  const freshlocation = buildLocationObject(coordinateStringArray);
+  pushToArray(freshlocation);
+  store.requestId++;
+  return freshlocation.storeId;
+};
+
 const pushToArray = function (obj) {
   store.state.push(obj);
 };
 
-const findLocationById = function (id) {
+const findLocationById = function (storeId) {
   return store.state.find(location => {
-    if (id === location.id) {
+    if (storeId === location.storeId) {
       return location;
     }
   });
 };
 
-const checkForExistingSuccessfulResponse = (storeId, userRequest) => {
+const checkForExistingSuccessfulResponse = (store
+  
+  
+  , userRequest) => {
   const locationObject = findLocationById(storeId);
   if (userRequest.mapOrSatellite === 'map') {
     return locationObject.successfulResponses.filter(item =>
@@ -136,7 +137,7 @@ export const store = {
   currentDisplay: {},
   requestId: 10,
   secretForm: false,
-  getCoordinates,
+  parseCoordinatesAndGetStoreId,
   pushToArray,
   findLocationById,
   seedData,
