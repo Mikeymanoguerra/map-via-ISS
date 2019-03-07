@@ -6,7 +6,6 @@ const seedData = function () {
   return parseCoordinatesAndGetStoreId(data);
 };
 
-
 const buildCoordinateStrings = (responseData) => {
   const latitude = responseData['iss_position'].latitude;
   const longitude = responseData['iss_position'].longitude;
@@ -50,10 +49,7 @@ const findLocationById = function (storeId) {
   });
 };
 
-const checkForExistingSuccessfulResponse = (store
-  
-  
-  , userRequest) => {
+const checkForExistingSuccessfulResponse = (storeId, userRequest) => {
   const locationObject = findLocationById(storeId);
   if (userRequest.mapOrSatellite === 'map') {
     return locationObject.successfulResponses.filter(item =>
@@ -87,7 +83,8 @@ const handleResponseStorage = (storeId, responseData) => {
     };
     return addApiResponseToLocationObject(storeId, newResponseObject);
   }
-  if (responseData.mapOrSatellite === 'satellite') {
+  if (responseData.mapOrSatellite === 'satellite' ||
+    responseData.mapOrSatellite === 'spacewalk') {
     const { mapOrSatellite, url, dateArray, zoomInDegrees } = responseData;
     let newResponseObject = {
       imageId,
@@ -121,6 +118,14 @@ const updateCurrentDisplay = (storeId, newResponseObject) => {
   if (newResponseObject.mapOrSatellite === 'satellite') {
     store.currentDisplay = Object.assign({}, store.currentDisplay, {
       currentSatelliteOnDom: {
+        storeId,
+        imageId: newResponseObject.imageId
+      }
+    });
+  }
+  if (newResponseObject.mapOrSatellite === 'spacewalk') {
+    store.currentDisplay = Object.assign({}, store.currentDisplay, {
+      currentAstronautOnDom: {
         storeId,
         imageId: newResponseObject.imageId
       }

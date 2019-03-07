@@ -1,11 +1,10 @@
 /* eslint-disable no-undef */
 /* eslint-disable no-console,  */
 
-
 import { utils } from './utils';
 import { store } from './store';
 import { api } from './api';
-// import { secretCoordinateForm } from './secret-coordinate-form';
+import { secretCoordinateForm } from './secret-coordinate-form';
 
 function getlocationObjectFromStore(storeId) {
   return store.findLocationById(storeId);
@@ -58,7 +57,6 @@ function handleTimeTraversal(storeId, userRequest, direction) {
     })
     .catch(err => console.log(err));
 }
-
 
 function getStoreAndImageIds(event) {
   const storeId = parseInt(
@@ -151,32 +149,45 @@ const mapToDom = (storeId, newResponseObject) => {
     `);
 };
 
+
+
 function render() {
   console.log(store.currentDisplay);
-  if (store.secretForm) {
-    // get form.storeId and form.imageId
-    // call a function that builds formHtmlString
-    // insert that string into dom
-  }
+
+  secretCoordinateForm.secretFormToDom();
+  // get form.storeId and form.imageId
+  // call a function that builds formHtmlString
+  // insert that string into dom
+
   if (store.currentDisplay.currentSatelliteOnDom) {
     const storeId = store.currentDisplay.currentSatelliteOnDom.storeId;
     const imageId = store.currentDisplay.currentSatelliteOnDom.imageId;
     const [responseObject] = store.getExistingSuccessfulResponse(storeId, imageId);
-    return nasaImageToDom(storeId, responseObject);
+    console.log(responseObject);
+    nasaImageToDom(storeId, responseObject);
   }
 
   if (store.currentDisplay.currentMapOnDom) {
     const storeId = store.currentDisplay.currentMapOnDom.storeId;
     const imageId = store.currentDisplay.currentMapOnDom.imageId;
     const [responseObject] = store.getExistingSuccessfulResponse(storeId, imageId);
-    return mapToDom(storeId, responseObject);
+    console.log(responseObject);
+    mapToDom(storeId, responseObject);
+  }
+
+  if (store.currentDisplay.currentAstronautOnDom) {
+    const storeId = store.currentDisplay.currentAstronautOnDom.storeId;
+    const imageId = store.currentDisplay.currentAstronautOnDom.imageId;
+    const [responseObject] = store.getExistingSuccessfulResponse(storeId, imageId);
+    console.log(responseObject);
+    secretCoordinateForm.astronautToDom(storeId, responseObject);
   }
 }
 
-function handleNasaResponse(storeId, res) {
+function handleNasaResponse(storeId, res, mapOrSatellite = 'satellite') {
   const dateArray = utils.dateArrayFromString(res.date);
   const responseData = {
-    mapOrSatellite: 'satellite',
+    mapOrSatellite,
     url: res.url,
     dateArray,
     zoomInDegrees: .05
@@ -203,17 +214,18 @@ function handleISSRequest() {
 
 const onIssBasedSatelliteImageRequest = function () {
   $('.button-container').on('click', '.js-get-data', function () {
+    let storeId;
     return handleISSRequest()
-      .then(storeId => {
+      .then(_storeId => {
+        storeId = _storeId;
         const { nasaCoordinates } = getlocationObjectFromStore(storeId);
-        return api.getNasaImage(nasaCoordinates)
-          .then((res) => {
-            handleNasaResponse(storeId, res);
-            return render();
-          });
+        return api.getNasaImage(nasaCoordinates);
+      })
+      .then((res) => {
+        handleNasaResponse(storeId, res);
+        return render();
       })
       .catch(err => {
-
         console.log(err);
         nasaImageToDom(storeId, err);
         const { mapCoordinates } = getlocationObjectFromStore(storeId);
@@ -272,17 +284,20 @@ function onRequestForMatchingSatelliteImage() {
 
 const onIssBasedMapRequest = function () {
   $('.button-container').on('click', '.js-get-map', function () {
+    let storeId;
     return handleISSRequest()
-      .then(storeId => {
+      .then(_storeId => {
+        storeId = _storeId;
         const { mapCoordinates } = getlocationObjectFromStore(storeId);
-        return api.getMapData(mapCoordinates, 5)
-          .then(url => {
-            handleMapResponse(storeId, url);
-            return render();
-          })
-          .catch(err => console.log(err));
-      });
+        return api.getMapData(mapCoordinates, 5);
+      })
+      .then(url => {
+        handleMapResponse(storeId, url);
+        return render();
+      })
+      .catch(err => console.log(err));
   });
+
 };
 
 const onMapZoomAdjust = () => {
@@ -306,6 +321,7 @@ const onMapZoomAdjust = () => {
           .catch(err => console.log(err));
       });
 };
+
 
 const addFakeData = function () {
   $('.button-container').on('click', '.test-data', function () {
@@ -335,30 +351,13 @@ const bindEventListeners = () => {
   onRequestForEarlierImage();
   onRequestForLaterImage();
   onMapZoomAdjust();
+
   addFakeData();
 
 };
 
 export const events = {
+  handleNasaResponse,
   bindEventListeners,
   render
 };
-
-// when the button is clicked, use the Open Notify Api to get coordinates of ISS
-// give button a couple second timeout
-//  event listener for button click
-// can the local store maintain the photos?
-
-
-
-// function getImageSatteliteVal(){
-//    return parseInt($('.go-forward').siblings('img.map-image').attr('value'));
-// }
-
-//   function handleGoForward(){
-//       id = getImageSatteliteVal();
-//       const originalLocation = store.findLocationById(id);
-
-//   }
-
-     // TODO error immage;
