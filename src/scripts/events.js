@@ -116,7 +116,6 @@ const mapToDom = (storeId, newResponseObject) => {
   } = store.findLocationById(storeId);
   let { mapZoom, url } = newResponseObject;
   mapZoom = mapZoom - 2;
-  console.log(newResponseObject);
   $('.map-results').html(`
     <img class='map-image' value=${storeId} src='${url}' alt='map of the image to the left'>
     <p>Longitude: ${longitude}, Latitude: ${latitude}</p>
@@ -152,18 +151,14 @@ const mapToDom = (storeId, newResponseObject) => {
 
 
 function render() {
-  console.log(store.currentDisplay);
 
   secretCoordinateForm.secretFormToDom();
-  // get form.storeId and form.imageId
-  // call a function that builds formHtmlString
-  // insert that string into dom
 
   if (store.currentDisplay.currentSatelliteOnDom) {
     const storeId = store.currentDisplay.currentSatelliteOnDom.storeId;
     const imageId = store.currentDisplay.currentSatelliteOnDom.imageId;
     const [responseObject] = store.getExistingSuccessfulResponse(storeId, imageId);
-    console.log(responseObject);
+
     nasaImageToDom(storeId, responseObject);
   }
 
@@ -171,7 +166,6 @@ function render() {
     const storeId = store.currentDisplay.currentMapOnDom.storeId;
     const imageId = store.currentDisplay.currentMapOnDom.imageId;
     const [responseObject] = store.getExistingSuccessfulResponse(storeId, imageId);
-    console.log(responseObject);
     mapToDom(storeId, responseObject);
   }
 
@@ -179,7 +173,6 @@ function render() {
     const storeId = store.currentDisplay.currentAstronautOnDom.storeId;
     const imageId = store.currentDisplay.currentAstronautOnDom.imageId;
     const [responseObject] = store.getExistingSuccessfulResponse(storeId, imageId);
-    console.log(responseObject);
     secretCoordinateForm.astronautToDom(storeId, responseObject);
   }
 }

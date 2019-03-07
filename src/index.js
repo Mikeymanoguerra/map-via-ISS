@@ -8,7 +8,6 @@ import { secretCoordinateForm } from './scripts/secret-coordinate-form';
 
 window.$ = $;
 $(document).ready(function () {
-  console.log('end');
   events.bindEventListeners();
   events.render();
   secretCoordinateForm.bindFormListeners();

@@ -11,12 +11,12 @@ function secretFormToDom() {
 
 
 const onExposeCoordinateForm = function () {
-  $('.button-container').on('click', '.form-toggle', function () {
+  $('#secret').on('click', function () {
     store.handleSecretFormToggle();
     events.render();
-    console.log(store.secretForm);
   });
 };
+
 
 function trickStoreWithCoordinates(longitude, latitude) {
   const spaceWalkObject = {
@@ -28,16 +28,38 @@ function trickStoreWithCoordinates(longitude, latitude) {
   return store.parseCoordinatesAndGetStoreId(spaceWalkObject);
 }
 
+function validator(value) {
+  let error;
+  const lengthCheck = str => str.trim().length > 10 ? error = '10 characters or less please!' : undefined;
+  const characterCheck = str => str.match(/[^0-9.-]/) ? error = 'Decimal degrees only include 0-9, ., -' : undefined;
+  characterCheck(value);
+  lengthCheck(value);
+  return error;
+}
+
+function validateAndPrepareSubmission(event) {
+  const formArray = $(event.target).serializeArray();
+  const [longitudeObject, latitudeObject] = formArray;
+  const latitude = latitudeObject.value;
+  const longitude = longitudeObject.value;
+  let error1 = validator(longitude);
+  let error2 = validator(longitude);
+  if (error1 || error2) {
+    throw new Error(error1, error2);
+  }
+  const nasaCoordinates = `lon=${longitude}&lat=${latitude}`;
+  return [nasaCoordinates, longitude, latitude];
+
+}
+
 function onSecretFormSubmission() {
   $('.secret-form-container').on('click', '.submit-button', function () {
     $('.coordinates-input').submit(function (event) {
       event.preventDefault();
-      const formArray = $(event.target).serializeArray();
-      const [longitudeObject, latitudeObject] = formArray;
-      const nasaCoordinates = `lon=${longitudeObject.value}&lat=${latitudeObject.value}`;
+      const [nasaCoordinates, longitude, latitude] = validateAndPrepareSubmission(event);
       return api.getNasaImage(nasaCoordinates)
         .then(res => {
-          const storeId = trickStoreWithCoordinates(longitudeObject.value, latitudeObject.value);
+          const storeId = trickStoreWithCoordinates(longitude, latitude);
           events.handleNasaResponse(storeId, res, 'spacewalk');
           events.render();
 
