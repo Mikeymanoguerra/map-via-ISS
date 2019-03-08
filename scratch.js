@@ -155,3 +155,33 @@ if (userRequest.mapOrSatellite === 'satellite') {
 }
 
 */
+
+
+// const addFakeData = function () {
+//   $('.button-container').on('click', '.test-data', function () {
+//     let storeId = store.seedData();
+//     const { nasaCoordinates } = getlocationObjectFromStore(storeId);
+//     return api.getNasaImage(nasaCoordinates)
+//       .then((res) => {
+//         const newResponseObject = handleNasaResponse(storeId, res);
+//         return nasaImageToDom(storeId, newResponseObject);
+//       })
+//       .catch(err => {
+//         console.log(err);
+//         nasaImageToDom(storeId, err);
+//         const { mapCoordinates } = getlocationObjectFromStore(storeId);
+//         return api.getMapData(mapCoordinates, 4)
+//           .then(data => mapToDom(storeId, data))
+//           .catch(err => console.log(err));
+//       });
+//   });
+// };
+
+
+
+// const seedData = function () {
+//   const data = {
+//     iss_position: { longitude: "-122.4194", latitude: "37.7749" }
+//   };
+//   return parseCoordinatesAndGetStoreId(data);
+// };

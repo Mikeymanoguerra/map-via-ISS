@@ -174,8 +174,6 @@ const mapToDom = (storeId, newResponseObject) => {
 
 function render() {
   secretCoordinateForm.secretFormToDom();
-  console.log(store.state);
-
   if (store.currentDisplay.currentSatelliteOnDom) {
     const storeId = store.currentDisplay.currentSatelliteOnDom.storeId;
     const imageId = store.currentDisplay.currentSatelliteOnDom.imageId;
@@ -341,27 +339,6 @@ const onMapZoomAdjust = () => {
       });
 };
 
-
-const addFakeData = function () {
-  $('.button-container').on('click', '.test-data', function () {
-    let storeId = store.seedData();
-    const { nasaCoordinates } = getlocationObjectFromStore(storeId);
-    return api.getNasaImage(nasaCoordinates)
-      .then((res) => {
-        const newResponseObject = handleNasaResponse(storeId, res);
-        return nasaImageToDom(storeId, newResponseObject);
-      })
-      .catch(err => {
-        console.log(err);
-        nasaImageToDom(storeId, err);
-        const { mapCoordinates } = getlocationObjectFromStore(storeId);
-        return api.getMapData(mapCoordinates, 4)
-          .then(data => mapToDom(storeId, data))
-          .catch(err => console.log(err));
-      });
-  });
-};
-
 const bindEventListeners = () => {
   onIssBasedSatelliteImageRequest();
   onIssBasedMapRequest();
@@ -386,12 +363,3 @@ export const events = {
 
 
 
-// console.log(err);
-// nasaImageToDom(storeId, err);
-// const { mapCoordinates } = getlocationObjectFromStore(storeId);
-// return api.getMapData(mapCoordinates, 4)
-//   .then(url => {
-//     handleMapResponse(storeId, url);
-//     return render();
-//   })
-//   .catch(err => console.log(err));

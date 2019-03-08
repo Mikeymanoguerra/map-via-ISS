@@ -1,12 +1,6 @@
 import { api } from "./api";
 import { events } from "./events";
 
-const seedData = function () {
-  const data = {
-    iss_position: { longitude: "-122.4194", latitude: "37.7749" }
-  };
-  return parseCoordinatesAndGetStoreId(data);
-};
 
 const buildCoordinateStrings = (responseData) => {
   const latitude = responseData['iss_position'].latitude;
@@ -297,7 +291,6 @@ export const store = {
   parseCoordinatesAndGetStoreId,
   pushToArray,
   findLocationById,
-  seedData,
   nasaError: null,
   formError: null,
   formValidationError: null,
