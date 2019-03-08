@@ -30,8 +30,8 @@ function trickStoreWithCoordinates(longitude, latitude) {
 
 function validator(value) {
   let error;
-  const lengthCheck = str => str.trim().length > 10 ? error = '10 characters or less please!' : undefined;
-  const characterCheck = str => str.match(/[^0-9.-]/) ? error = 'Decimal degrees only include 0-9, ., -' : undefined;
+  const lengthCheck = str => str.trim().length > 10 ? error = 'form-input-length' : undefined;
+  const characterCheck = str => str.match(/[^0-9.-]/) ? error = 'form-characters' : undefined;
   characterCheck(value);
   lengthCheck(value);
   return error;
@@ -44,8 +44,14 @@ function validateAndPrepareSubmission(event) {
   const longitude = longitudeObject.value;
   let error1 = validator(longitude);
   let error2 = validator(longitude);
-  if (error1 || error2) {
-    throw new Error(error1, error2);
+  if (error1) {
+    store.handleErrorMessage(error1);
+    return [null];
+  }
+  if (error2) {
+    store.handleErrorMessage(error2);
+    return [null];
+
   }
   const nasaCoordinates = `lon=${longitude}&lat=${latitude}`;
   return [nasaCoordinates, longitude, latitude];
@@ -57,6 +63,9 @@ function onSecretFormSubmission() {
     $('.coordinates-input').submit(function (event) {
       event.preventDefault();
       const [nasaCoordinates, longitude, latitude] = validateAndPrepareSubmission(event);
+      if (!nasaCoordinates) {
+        return events.render();
+      }
       return api.getNasaImage(nasaCoordinates)
         .then(res => {
           const storeId = trickStoreWithCoordinates(longitude, latitude);
@@ -64,28 +73,54 @@ function onSecretFormSubmission() {
           events.render();
 
         })
-        .catch(err => console.log(err));
+        .catch(() => events.handleErrors('form-water'));
     });
   });
 }
+function validationErrorToDom() {
+  const errorString = events.generateErrorString();
+  const htmlString = `<div class='error-container'>${errorString}</div>`;
+  $('.form-results').html(htmlString);
+  events.generateErrorString('form-reset');
+}
 
+function onShowFormRequestOnMap() {
+  $('.secret-form-container').on('click', '.form-matching-map', function () {
+   
+    const storeId = parseInt($(this).siblings('img.form-map-image').attr('value'));
+    const { mapCoordinates } = events.getlocationObjectFromStore(storeId);
+    return api.getMapData(mapCoordinates, 5)
+      .then(url => {
+        events.handleMapResponse(storeId, url);
+        return events.render();
+      })
+      .catch(err => console.log(err));
+  });
+
+}
 
 function astronautToDom(storeId, newResponseObject) {
+
   const { url, imageId } = newResponseObject;
   const {
     longitude,
     latitude,
   } = store.findLocationById(storeId);
+  const errorString = events.generateErrorString();
   const htmlString = `
-    <img class='nasa-map-image'
+    <img class='form-map-image'
     value=${storeId} id=${imageId}
     src="${url}" alt="satellite image at longitude ${longitude}, latitude ${latitude}">
+    <div class='error-container'>${errorString}</div>
     <p>Longitude: ${longitude}, Latitude: ${latitude}</p>
+    <span>Get this location on a map!</span><button class='form-matching-map'>Get!</button><br>
     `;
   $('.form-results').html(htmlString);
-  // <span>Get this location on a map!</span><button class='matching-map'>Get!</button><br>
-  //   <button class='go-back'>Go back in time</button>
-  //   <button class='go-forward'>Go forward in time</button>
+  events.generateErrorString('form-reset');
+
+  // <button class='form-go-back'>Go back in time</button>
+  // <button class='form-go-forward'>Go forward in time</button>
+
 
 }
 
@@ -114,6 +149,7 @@ const htmlString = `
 const bindFormListeners = () => {
   onExposeCoordinateForm();
   onSecretFormSubmission();
+  onShowFormRequestOnMap();
 };
 
 export const secretCoordinateForm = {
@@ -121,6 +157,7 @@ export const secretCoordinateForm = {
   disappears,
   astronautToDom,
   bindFormListeners,
-  secretFormToDom
+  secretFormToDom,
+  validationErrorToDom,
 
 };

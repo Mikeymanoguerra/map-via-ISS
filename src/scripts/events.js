@@ -55,7 +55,9 @@ function handleTimeTraversal(storeId, userRequest, direction) {
       store.handleResponseStorage(storeId, responseData);
       return render();
     })
-    .catch(err => console.log(err));
+    .catch(() => {
+      return handleErrors('date');
+    });
 }
 
 function getStoreAndImageIds(event) {
@@ -91,22 +93,44 @@ function getZoomValueAndStoreId(event) {
     }];
 }
 
+function generateErrorString(reset) {
+  if (reset) {
+    return store.handleErrorMessage(reset);
+  }
+  if (store.formError) {
+    const errorMessage = store.formError;
+    return `<p>${errorMessage}</p>`;
+  }
+  if (store.nasaError) {
+    const errorMessage = store.nasaError;
+    return `<p>${errorMessage}</p>`;
+  }
+  if (store.formValidationError) {
+    const errorMessage = store.formValidationError;
+    return `<p>${errorMessage}</p>`;
+  }
+  return `<p></p>`;
+}
+
 const nasaImageToDom = function (storeId, newResponseObject) {
   const { url, imageId } = newResponseObject;
   const {
     longitude,
     latitude,
   } = store.findLocationById(storeId);
+  const errorString = generateErrorString();
   const htmlString = `
     <img class='nasa-map-image'
     value=${storeId} id=${imageId}
     src="${url}" alt="satellite image at longitude ${longitude}, latitude ${latitude}">
+    <div class='error-container'>${errorString}</div>
     <p>Longitude: ${longitude}, Latitude: ${latitude}</p>
     <span>Get this location on a map!</span><button class='matching-map'>Get!</button><br>
     <button class='go-back'>Go back in time</button>
     <button class='go-forward'>Go forward in time</button>
     `;
   $('.nasa-results').html(htmlString);
+  generateErrorString('nasa-reset');
 };
 
 const mapToDom = (storeId, newResponseObject) => {
@@ -148,11 +172,9 @@ const mapToDom = (storeId, newResponseObject) => {
     `);
 };
 
-
-
 function render() {
-
   secretCoordinateForm.secretFormToDom();
+  console.log(store.state);
 
   if (store.currentDisplay.currentSatelliteOnDom) {
     const storeId = store.currentDisplay.currentSatelliteOnDom.storeId;
@@ -174,6 +196,10 @@ function render() {
     const imageId = store.currentDisplay.currentAstronautOnDom.imageId;
     const [responseObject] = store.getExistingSuccessfulResponse(storeId, imageId);
     secretCoordinateForm.astronautToDom(storeId, responseObject);
+  }
+
+  if (store.formValidationError) {
+    secretCoordinateForm.validationErrorToDom();
   }
 }
 
@@ -205,6 +231,16 @@ function handleISSRequest() {
     });
 }
 
+const handleErrors = function (errorType) {
+  store.handleErrorMessage(errorType);
+  return store.chooseRandomIslandFromMemory(errorType)
+    .then(() => {
+      return render();
+    });
+};
+
+
+
 const onIssBasedSatelliteImageRequest = function () {
   $('.button-container').on('click', '.js-get-data', function () {
     let storeId;
@@ -218,16 +254,8 @@ const onIssBasedSatelliteImageRequest = function () {
         handleNasaResponse(storeId, res);
         return render();
       })
-      .catch(err => {
-        console.log(err);
-        nasaImageToDom(storeId, err);
-        const { mapCoordinates } = getlocationObjectFromStore(storeId);
-        return api.getMapData(mapCoordinates, 4)
-          .then(url => {
-            handleMapResponse(storeId, url);
-            return render();
-          })
-          .catch(err => console.log(err));
+      .catch(() => {
+        return handleErrors('nasa-water');
       });
   });
 };
@@ -268,9 +296,8 @@ function onRequestForMatchingSatelliteImage() {
         handleNasaResponse(storeId, res);
         return render();
       })
-      .catch(err => {
-        nasaImageToDom(storeId, err);
-        console.log(err);
+      .catch(() => {
+        return handleErrors('nasa-water');
       });
   });
 }
@@ -290,7 +317,6 @@ const onIssBasedMapRequest = function () {
       })
       .catch(err => console.log(err));
   });
-
 };
 
 const onMapZoomAdjust = () => {
@@ -344,13 +370,28 @@ const bindEventListeners = () => {
   onRequestForEarlierImage();
   onRequestForLaterImage();
   onMapZoomAdjust();
-
   addFakeData();
 
 };
 
 export const events = {
+  handleErrors,
+  generateErrorString,
   handleNasaResponse,
+  handleMapResponse,
+  getlocationObjectFromStore,
   bindEventListeners,
   render
 };
+
+
+
+// console.log(err);
+// nasaImageToDom(storeId, err);
+// const { mapCoordinates } = getlocationObjectFromStore(storeId);
+// return api.getMapData(mapCoordinates, 4)
+//   .then(url => {
+//     handleMapResponse(storeId, url);
+//     return render();
+//   })
+//   .catch(err => console.log(err));

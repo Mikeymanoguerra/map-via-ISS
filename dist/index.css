@@ -26,6 +26,9 @@ h1{
   flex-wrap: wrap;
 
 }
+.error-container{
+  max-width: 480px;
+}
 
 
 .map-results, .nasa-results, .revealed-form{
