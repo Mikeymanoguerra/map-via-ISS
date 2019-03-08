@@ -1,7 +1,5 @@
 
 // TODO config file
-// TODO use those coordinates to determine if over land or water on water API
-// TODO use IP address of user to get dead reckoning or something
 // TODO better icon
 
 const ISS_URL =

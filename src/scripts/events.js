@@ -32,7 +32,7 @@ function handleTimeTraversal(storeId, userRequest, direction) {
   const userRequestWithDate = Object.assign({}, userRequest, {
     dateArray: newDateArray
   });
-
+  
   // TODO, Pull below code out, once this works
   const [existingAsset] =
     store.checkForExistingSuccessfulResponse(storeId, userRequestWithDate);
@@ -237,8 +237,6 @@ const handleErrors = function (errorType) {
     });
 };
 
-
-
 const onIssBasedSatelliteImageRequest = function () {
   $('.button-container').on('click', '.js-get-data', function () {
     let storeId;
@@ -347,8 +345,6 @@ const bindEventListeners = () => {
   onRequestForEarlierImage();
   onRequestForLaterImage();
   onMapZoomAdjust();
-  addFakeData();
-
 };
 
 export const events = {

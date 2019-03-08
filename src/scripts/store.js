@@ -160,15 +160,15 @@ const handleErrorMessage = (errorType = null) => {
   if (errorType === 'nasa-500') {
     store.nasaError = '500 error from server. try again later!';
   }
-
-  if (errorType === 'nasa-reset') store.nasaError = null;
   if (errorType === 'form-reset') {
     store.formError = null;
     store.formValidationError = null;
   }
-  ;
+
+  if (errorType === 'nasa-reset') store.nasaError = null;
 
 };
+
 const determineErrorLocation = (errorType) => {
   const errorLocation = errorType.slice(0, 4);
   let mapOrSatellite = 'satellite';

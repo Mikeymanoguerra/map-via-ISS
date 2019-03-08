@@ -9,14 +9,12 @@ function secretFormToDom() {
   } else $('.secret-form-container').html(secretCoordinateForm.disappears);
 }
 
-
 const onExposeCoordinateForm = function () {
   $('#secret').on('click', function () {
     store.handleSecretFormToggle();
     events.render();
   });
 };
-
 
 function trickStoreWithCoordinates(longitude, latitude) {
   const spaceWalkObject = {
@@ -51,7 +49,6 @@ function validateAndPrepareSubmission(event) {
   if (error2) {
     store.handleErrorMessage(error2);
     return [null];
-
   }
   const nasaCoordinates = `lon=${longitude}&lat=${latitude}`;
   return [nasaCoordinates, longitude, latitude];
@@ -77,6 +74,7 @@ function onSecretFormSubmission() {
     });
   });
 }
+
 function validationErrorToDom() {
   const errorString = events.generateErrorString();
   const htmlString = `<div class='error-container'>${errorString}</div>`;
@@ -96,7 +94,6 @@ function onShowFormRequestOnMap() {
       })
       .catch(err => console.log(err));
   });
-
 }
 
 function astronautToDom(storeId, newResponseObject) {
@@ -117,15 +114,9 @@ function astronautToDom(storeId, newResponseObject) {
     `;
   $('.form-results').html(htmlString);
   events.generateErrorString('form-reset');
-
   // <button class='form-go-back'>Go back in time</button>
   // <button class='form-go-forward'>Go forward in time</button>
-
-
 }
-
-
-
 
 const disappears = ` <div class="no-form"></div>`;
 const htmlString = ` 
