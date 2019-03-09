@@ -1,14 +1,41 @@
 const path = require('path');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const webpackMajorVersion = require('webpack/package.json').version.split('.')[0];
 
 module.exports = {
-  mode: 'development',
+  context: __dirname,
   entry: './src/index.js',
   output: {
-    publicPath: "/Views-via-ISS/", 
-    path: path.resolve(__dirname, 'dist'),
+    path: path.join(__dirname, 'dist/'),
+    publicPath: '',
     filename: 'main.js'
   },
-  devServer: {
-    contentBase: './dist'
+  module: {
+    rules: [
+      {
+        test: /\.css$/,
+        use: [
+          {
+            loader: MiniCssExtractPlugin.loader,
+            options: {
+              publicPath: ''
+            }
+          },
+          'css-loader'
+        ]
+      },
+      // { test: /\.png$/, loader: 'file-loader' },
+      // { test: /\.html$/, loader: 'html-loader' }
+    ]
   },
+  plugins: [
+    new HtmlWebpackPlugin({
+      filename: 'index.html',
+      // favicon: 'favicon.ico',
+      template: 'index.html'
+    }),
+
+    new MiniCssExtractPlugin({ filename: 'styles.css' })
+  ]
 };
