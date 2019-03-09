@@ -29,13 +29,15 @@ module.exports = {
       // { test: /\.html$/, loader: 'html-loader' }
     ]
   },
+  devServer: {
+    contentBase: './dist'
+  },
   plugins: [
     new HtmlWebpackPlugin({
       filename: 'index.html',
       // favicon: 'favicon.ico',
       template: 'index.html'
     }),
-
-    new MiniCssExtractPlugin({ filename: 'styles.css' })
+    new MiniCssExtractPlugin({ filename: 'index.css' })
   ]
 };
