@@ -185,3 +185,64 @@ if (userRequest.mapOrSatellite === 'satellite') {
 //   };
 //   return parseCoordinatesAndGetStoreId(data);
 // };
+
+
+
+/**  confing messs */
+
+
+// const merge = require('webpack-merge');
+// const common = require('./webpack.common.js');
+
+// module.exports = merge(common, {
+//   mode: 'production',
+// });
+
+
+
+
+
+// const path = require('path');
+
+// module.exports = {
+//   mode: 'development',
+//   entry: './src/index.js',
+//   output: {
+//     publicPath: "/Views-via-ISS/", 
+//     path: path.resolve(__dirname, 'dist'),
+//     filename: 'main.js'
+//   },
+//   devServer: {
+//     contentBase: './dist'
+//   },
+// };
+
+// const path = require('path');
+// const CleanWebpackPlugin = require('clean-webpack-plugin');
+// const HtmlWebpackPlugin = require('html-webpack-plugin');
+// module.exports = {
+//   entry: {
+//     app: './src/index.js'
+//   },
+//   plugins: [
+//     new CleanWebpackPlugin(),
+//     new HtmlWebpackPlugin({
+//       template: 'template.js'
+//     })
+//   ],
+//   output: {
+//     filename: 'main.js',
+//     path: path.resolve(__dirname, 'dist')
+//   }
+// };
+
+
+// const merge = require('webpack-merge');
+// const common = require('./webpack.common.js');
+// module.exports = merge(common, {
+//   mode: 'development',
+//   devtool: 'inline-source-map',
+//   devServer: {
+//     contentBase: './dist'
+//   }
+//  });
