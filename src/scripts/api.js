@@ -3,7 +3,7 @@
 // TODO better icon
 
 const ISS_URL =
-  'http://api.open-notify.org/iss-now.json?callback=?';
+  'https://api.open-notify.org/iss-now.json?callback=?';
 const NASA_URL =
   'https://api.nasa.gov/planetary/earth/imagery?';
 const NASA_API_KEY =
