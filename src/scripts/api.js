@@ -3,7 +3,8 @@
 // TODO better icon
 
 const ISS_URL =
-  'http://api.open-notify.org/iss-now.json?callback=?';
+  'https://api.wheretheiss.at/v1/satellites/25544';
+// 'http://api.open-notify.org/iss-now.json?callback=?';
 const NASA_URL =
   'https://api.nasa.gov/planetary/earth/imagery?';
 const NASA_API_KEY =
@@ -12,6 +13,8 @@ const MAP_URL =
   'https://www.mapquestapi.com/staticmap/v5/map?key=Zv1VRVyg4mhlWC8AmfdyyfhLhZS5EGcO&locations=';
 
 const getNasaImage = (coordinates, date = '2013-12-24', dim = .05, callback) => {
+
+  console.log(coordinates);
   return $.getJSON(`${NASA_URL}${coordinates}&date=${date}&dim=${dim}&${NASA_API_KEY}`,
     callback);
 };
@@ -30,6 +33,7 @@ const getMapData = (coordinates, zoom = 5) => {
 
 const getISSdata = () => {
   const data = $.getJSON(`${ISS_URL}`);
+  console.log(data);
   return data;
 };
 

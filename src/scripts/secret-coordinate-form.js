@@ -18,10 +18,8 @@ const onExposeCoordinateForm = function () {
 
 function trickStoreWithCoordinates(longitude, latitude) {
   const spaceWalkObject = {
-    'iss_position': {
-      longitude,
-      latitude
-    }
+    longitude,
+    latitude
   };
   return store.parseCoordinatesAndGetStoreId(spaceWalkObject);
 }
@@ -84,7 +82,7 @@ function validationErrorToDom() {
 
 function onShowFormRequestOnMap() {
   $('.secret-form-container').on('click', '.form-matching-map', function () {
-   
+
     const storeId = parseInt($(this).siblings('img.form-map-image').attr('value'));
     const { mapCoordinates } = events.getlocationObjectFromStore(storeId);
     return api.getMapData(mapCoordinates, 5)

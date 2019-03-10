@@ -3,8 +3,10 @@ import { events } from "./events";
 
 
 const buildCoordinateStrings = (responseData) => {
-  const latitude = responseData['iss_position'].latitude;
-  const longitude = responseData['iss_position'].longitude;
+  let latitude = responseData.latitude;
+  let longitude = responseData.longitude;
+  latitude = Math.round(latitude * 10000) / 10000;
+  longitude = Math.round(longitude * 10000) / 10000;
   const nasaCoordinates = `lon=${longitude}&lat=${latitude}`;
   const mapCoordinates = `${latitude},${longitude}`;
   return [latitude, longitude, nasaCoordinates, mapCoordinates];
