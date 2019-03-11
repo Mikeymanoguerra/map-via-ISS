@@ -21,7 +21,7 @@ p, span, label{
   margin-right: auto;
   text-align: center;
   width: 95%;
-  padding: 20px 0px; 
+  padding: 15px 0px; 
   border-width : 1px 0px;
   border-color: black;
   border-style: solid;
@@ -38,19 +38,19 @@ p, span, label{
 
 }
 .error-container{
-  max-width: 480px;
+  max-width: 280px;
 }
 
 .map-container, .nasa-container{
-  min-width: 500px;
+  min-width: 300px;
   min-height: 100px;  
   margin:1%;
 
 }
 
 .map-results, .nasa-results, .revealed-form{
-  min-width: 500px;
-  min-height: 750px;
+  min-width: 300px;
+  min-height: 650px;
   padding: 10px;
   transition-property:height;
   transition-timing-function: 2s;
@@ -101,7 +101,7 @@ div.button-container .hover-button1{
   width:160px; 
   display: inline-block;
   text-align: center;
-  margin: 0px  60px;
+  margin: 5px  60px;
   background-image: linear-gradient(to right,
   rgba(255, 0 , 0 , 0),
   #0089ad, #008b8b, #2b8758, #697b25, 
@@ -114,7 +114,7 @@ div.button-container .hover-button2{
   width:160px; 
   display: inline-block;
   text-align: center;
-  margin: 0px  60px;
+  margin: 5px  60px;
   background-image: linear-gradient(to right,
  rgba(255, 0 , 0 , 0),
 #697b25,#2b8758, #008b8b, #0089ad, 
@@ -128,7 +128,7 @@ transition: width 1s;
 }
 
 .button-container .hover-button2:hover{
-  margin:0px;
+  margin:5px 0px;
   width: 280px;
   transition-duration: 1s;
   transition-timing-function: linear;
@@ -140,7 +140,7 @@ transition: width 1s;
 }
 
  .button-container .hover-button1:hover{
-   margin:0px;
+   margin:5px 0px;
    width: 280px;
    transition-duration: 1s;
    transition-timing-function: linear; 
@@ -154,6 +154,6 @@ transition: width 1s;
 fieldset {
   border: 1px solid black;
   padding: 5px;
-  margin: 0;
+  margin-bottom: 5px;
   min-width: 0;
 }
