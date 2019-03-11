@@ -108,7 +108,7 @@ function astronautToDom(storeId, newResponseObject) {
     src="${url}" alt="satellite image at longitude ${longitude}, latitude ${latitude}">
     <div class='error-container'>${errorString}</div>
     <p>Longitude: ${longitude}, Latitude: ${latitude}</p>
-    <span>Get this location on a map!</span><button class='form-matching-map'>Get!</button><br>
+    <span>Get this location on a map!</span><button id='adjust-button' class='form-matching-map'>Get!</button><br>
     `;
   $('.form-results').html(htmlString);
   events.generateErrorString('form-reset');
@@ -123,13 +123,13 @@ const htmlString = `
  <fieldset>
      <legend>Space Walk</legend>
      <div class="input-group"></div>
-     <label for="title">Longitude</label>
      <input name="longitude" type="text" placeholder="Longitude">
+     <label for="title">Longitude</label>
    <div class="input-group"></div>
-     <label for="title">Lattitude</label>
-     <input name="lattitude" type="text" placeholder="Lattitude"><br>
+   <input name="lattitude" type="text" placeholder="Lattitude">
+     <label for="title">Lattitude</label><br>
      <label for="submit-button">Search For Astronaut Photo</label>
-     <button class="submit-button" name="submit">Submit</button>
+     <button id='adjust-button'class="submit-button" name="submit">Submit</button>
    </fieldset>
 </form>
 <div class="form-results"></div>

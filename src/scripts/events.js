@@ -32,7 +32,7 @@ function handleTimeTraversal(storeId, userRequest, direction) {
   const userRequestWithDate = Object.assign({}, userRequest, {
     dateArray: newDateArray
   });
-  
+
   // TODO, Pull below code out, once this works
   const [existingAsset] =
     store.checkForExistingSuccessfulResponse(storeId, userRequestWithDate);
@@ -120,16 +120,18 @@ const nasaImageToDom = function (storeId, newResponseObject) {
   } = store.findLocationById(storeId);
   const errorString = generateErrorString();
   const htmlString = `
+  <div class='nasa-results'>
     <img class='nasa-map-image'
     value=${storeId} id=${imageId}
     src="${url}" alt="satellite image at longitude ${longitude}, latitude ${latitude}">
     <div class='error-container'>${errorString}</div>
     <p>Longitude: ${longitude}, Latitude: ${latitude}</p>
-    <span>Get this location on a map!</span><button class='matching-map'>Get!</button><br>
-    <button class='go-back'>Go back in time</button>
-    <button class='go-forward'>Go forward in time</button>
+    <span>Get this location on a map!</span><button id='adjust-button' class='matching-map'>Get!</button><br>
+    <button id='adjust-button'class='go-back'>Go back in time</button>
+    <button id='adjust-button' class='go-forward'>Go forward in time</button>
+    </div>
     `;
-  $('.nasa-results').html(htmlString);
+  $('.nasa-container').html(htmlString);
   generateErrorString('nasa-reset');
 };
 
@@ -140,10 +142,11 @@ const mapToDom = (storeId, newResponseObject) => {
   } = store.findLocationById(storeId);
   let { mapZoom, url } = newResponseObject;
   mapZoom = mapZoom - 2;
-  $('.map-results').html(`
+  $('.map-container').html(`
+  <div class='map-results'>
     <img class='map-image' value=${storeId} src='${url}' alt='map of the image to the left'>
     <p>Longitude: ${longitude}, Latitude: ${latitude}</p>
-    <span>Get this location as a photo!</span><button class='matching-image'>Get!</button><br>
+    <span>Get this location as a photo!</span><button id='adjust-button' class='matching-image'>Get!</button><br>
     <p>Resolution</p>
     <label for="Adjust">Adjust</label> <br>
     <span> Zoom out </span> 
@@ -168,7 +171,8 @@ const mapToDom = (storeId, newResponseObject) => {
        <option value="15" label="15">
     </datalist>
     <br>
-    <span>Retrieve </span><button class='map-zoom-adjust'>Get New Map</button>
+    <span>Retrieve </span><button id='adjust-button' class='map-zoom-adjust'>Get New Map</button>
+    </div>
     `);
 };
 
@@ -257,21 +261,21 @@ const onIssBasedSatelliteImageRequest = function () {
 };
 
 const onRequestForEarlierImage = () => {
-  $('.nasa-results').on('click', '.go-back', function (event) {
+  $('.nasa-container').on('click', '.go-back', function (event) {
     const [storeId, userRequest] = getStoreAndImageIds(event);
     handleTimeTraversal(storeId, userRequest, -1);
   });
 };
 
 const onRequestForLaterImage = () => {
-  $('.nasa-results').on('click', '.go-forward', function (event) {
+  $('.nasa-container').on('click', '.go-forward', function (event) {
     const [storeId, userRequest] = getStoreAndImageIds(event);
     handleTimeTraversal(storeId, userRequest, 1);
   });
 };
 
 const onRequestForMatchingMap = function () {
-  $('.nasa-results').on('click', '.matching-map', function () {
+  $('.nasa-container').on('click', '.matching-map', function () {
     const storeId = parseInt($(this).siblings('img.nasa-map-image').attr('value'));
     const { mapCoordinates } = getlocationObjectFromStore(storeId);
     return api.getMapData(mapCoordinates, 5)
@@ -284,7 +288,7 @@ const onRequestForMatchingMap = function () {
 };
 
 function onRequestForMatchingSatelliteImage() {
-  $('.map-results').on('click', '.matching-image', function () {
+  $('.map-container').on('click', '.matching-image', function () {
     const storeId = parseInt($(this).siblings('img.map-image').attr('value'));
     const { nasaCoordinates } = getlocationObjectFromStore(storeId);
     return api.getNasaImage(nasaCoordinates)
@@ -316,7 +320,7 @@ const onIssBasedMapRequest = function () {
 };
 
 const onMapZoomAdjust = () => {
-  $('.map-results')
+  $('.map-container')
     .on('click',
       '.map-zoom-adjust', (event) => {
         const [storeId, userRequest] = getZoomValueAndStoreId(event);
