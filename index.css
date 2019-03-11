@@ -1,20 +1,31 @@
 *{
-  font-family: 'Courier New', Courier, monospace;
+  font-family: 'Rajdhani', sans-serif;
+  padding: 0px;
+  margin: 0px;
 }
 
 h1{
   text-align: center;
 }
+
+p, span, label{
+  font-size: 20px;
+  margin-top: 10px;
+}
+.link-out{
+  color:black;
+}
+
 .button-container {
+  margin-left: auto;
+  margin-right: auto;
   text-align: center;
   width: 95%;
-  display: inline-block;
-  padding: 15px;
+  padding: 20px 0px; 
   border-width : 1px 0px;
   border-color: black;
   border-style: solid;
-  margin-left: auto;
-  margin-right: auto;
+
 }
 
 #results-container{
@@ -30,12 +41,20 @@ h1{
   max-width: 480px;
 }
 
+.map-container, .nasa-container{
+  min-width: 500px;
+  min-height: 100px;  
+  margin:1%;
+
+}
 
 .map-results, .nasa-results, .revealed-form{
   min-width: 500px;
   min-height: 750px;
   padding: 10px;
-  margin:1%;
+  transition-property:height;
+  transition-timing-function: 2s;
+  /* margin:1%; */
   border: 1px solid black;
 }
 img{
@@ -43,6 +62,7 @@ img{
   margin-left: auto;
   margin-right: auto;
   max-width: 500px;
+  border-radius: 5px;
 
 }
 .spacecraft-container{
@@ -57,9 +77,83 @@ img{
   display:inline-block;
 }
 
+button#adjust-button{
+  width:auto;
+  margin: 5px;
+  padding: 5px 20px;
+  
+}
+
 button{
-  padding: 10px;
+  width: 160px;
+  padding: 10px 0px;
   font-size: 15px;
-  margin-left: auto;
-  margin-right: auto;
+  border-radius: 0px;
+  border-width: 0px;
+  background-color: black;
+  color: white;
+  text-shadow: 0 0 10px white;
+  transition: width 1s;
+}
+
+div.button-container .hover-button1{
+  transition-duration: 1s;
+  width:160px; 
+  display: inline-block;
+  text-align: center;
+  margin: 0px  60px;
+  background-image: linear-gradient(to right,
+  rgba(255, 0 , 0 , 0),
+  #0089ad, #008b8b, #2b8758, #697b25, 
+  rgba(255, 0 , 0 , 0)
+  );
+}
+
+div.button-container .hover-button2{
+   transition-duration: 1s;
+  width:160px; 
+  display: inline-block;
+  text-align: center;
+  margin: 0px  60px;
+  background-image: linear-gradient(to right,
+ rgba(255, 0 , 0 , 0),
+#697b25,#2b8758, #008b8b, #0089ad, 
+ rgba(255, 0 , 0 , 0)
+ );
+}
+
+.button-container button:hover{
+width:200px;
+transition: width 1s;
+}
+
+.button-container .hover-button2:hover{
+  margin:0px;
+  width: 280px;
+  transition-duration: 1s;
+  transition-timing-function: linear;
+ background-image: linear-gradient(to right,
+ rgba(255, 0 , 0 , 0),
+#697b25,#2b8758, #008b8b, #0089ad, 
+ rgba(255, 0 , 0 , 0)
+ );
+}
+
+ .button-container .hover-button1:hover{
+   margin:0px;
+   width: 280px;
+   transition-duration: 1s;
+   transition-timing-function: linear; 
+    background-image: linear-gradient(to right,
+  rgba(255, 0 , 0 , 0),
+  #0089ad, #008b8b, #2b8758, #697b25,
+  rgba(255, 0 , 0 , 0)
+  );
+}
+
+fieldset {
+  border: 1px solid black;
+  padding: 5px;
+  margin: 0;
+  min-width: 0;
 }
