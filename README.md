@@ -8,7 +8,7 @@ There is a secret form when the .png of the Landsat 8 is clicked.
 
 This app has a lot of possible extended features.
 
-##### Things in the works 
+### Things in the works 
 
 Improved 'you are here' image for map view, that switches to an astronaut on form submission, (spacewalk).
 
