@@ -17,7 +17,6 @@ const buildLocationObject = function (coordinateStringArray) {
   const locationObject = {
     storeId: store.requestId,
     nasaCoordinates,
-    zoomInDegrees: 0.05,
     mapCoordinates,
     longitude,
     latitude,
@@ -201,7 +200,8 @@ const ERROR_REDIRECTS = [
     mapCoordinates: "0.3113,-89.9557",
     nasaCoordinates: "lon=-89.9557&lat=0.3113",  // TODO practice 500 error here
     storeId: 1,
-    successfulResponses: []
+    successfulResponses: [],
+    zoomInDegrees: 0.10
   },
   {
     imageIdCount: 0,
@@ -211,7 +211,7 @@ const ERROR_REDIRECTS = [
     nasaCoordinates: "lon=-70.6562&lat=41.6658",
     storeId: 2,
     successfulResponses: [],
-    zoomInDegrees: 0.05
+    zoomInDegrees: 0.10
   },
   {
     imageIdCount: 0,
@@ -221,7 +221,7 @@ const ERROR_REDIRECTS = [
     nasaCoordinates: "lon=-109.3997&lat=-27.1127",
     storeId: 3,
     successfulResponses: [],
-    zoomInDegrees: 0.05,
+    zoomInDegrees: 0.10,
   },
   {
     imageIdCount: 0,
@@ -231,7 +231,7 @@ const ERROR_REDIRECTS = [
     nasaCoordinates: "lon=-109.2769&lat=-27.1258",
     storeId: 4,
     successfulResponses: [],
-    zoomInDegrees: 0.05
+    zoomInDegrees: 0.10
   },
   {
     imageIdCount: 0,
@@ -241,7 +241,7 @@ const ERROR_REDIRECTS = [
     nasaCoordinates: "lon=141.2468&lat=43.0646",
     storeId: 5,
     successfulResponses: [],
-    zoomInDegrees: 0.05
+    zoomInDegrees: 0.10
   },
   {
     imageIdCount: 0,
@@ -251,7 +251,7 @@ const ERROR_REDIRECTS = [
     nasaCoordinates: "lon=177.5736&lat=52.0602",
     storeId: 6,
     successfulResponses: [],
-    zoomInDegrees: 0.05
+    zoomInDegrees: 0.10
   },
   {
     imageIdCount: 0,
@@ -261,7 +261,7 @@ const ERROR_REDIRECTS = [
     nasaCoordinates: "lon=-123.0034&lat=37.6989",
     storeId: 7,
     successfulResponses: [],
-    zoomInDegrees: 0.05
+    zoomInDegrees: 0.10
   },
   {
     imageIdCount: 0,
@@ -271,7 +271,7 @@ const ERROR_REDIRECTS = [
     nasaCoordinates: "lon=-156.5511&lat=20.5523",
     storeId: 8,
     successfulResponses: [],
-    zoomInDegrees: 0.05
+    zoomInDegrees: 0.10
   },
   {
     imageIdCount: 0,
@@ -281,7 +281,7 @@ const ERROR_REDIRECTS = [
     nasaCoordinates: "lon=-81.7800&lat=24.5551",
     storeId: 9,
     successfulResponses: [],
-    zoomInDegrees: 0.05
+    zoomInDegrees: 0.10
   }
 ];
 
@@ -315,5 +315,5 @@ mapCoordinates: "41.6688,-122.4194",
 nasaCoordinates: "lon=-122.4194&lat=41.6688",
 storeId: 10,
 successfulResponses: [],
-zoomInDegrees: 0.05}
+zoomInDegrees: 0.10}
  */

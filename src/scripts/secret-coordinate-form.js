@@ -96,11 +96,20 @@ function onShowFormRequestOnMap() {
 
 function astronautToDom(storeId, newResponseObject) {
 
-  const { url, imageId } = newResponseObject;
+  const { url, imageId, dateArray, zoomInDegrees } = newResponseObject;
   const {
     longitude,
     latitude,
   } = store.findLocationById(storeId);
+
+  let checkedClose, checkedMedium, checkedWide, checkedSuper, checkedDuper;
+  zoomInDegrees === '.05' ? checkedClose = 'checked' : '';
+  zoomInDegrees === '0.1' ? checkedMedium = 'checked' : '';
+  zoomInDegrees === '0.5' ? checkedWide = 'checked' : '';
+  zoomInDegrees === '1.0' ? checkedSuper = 'checked' : '';
+  zoomInDegrees === '2.0' ? checkedDuper = 'checked' : '';
+
+
   const errorString = events.generateErrorString();
   const htmlString = `
     <img class='form-map-image'
@@ -108,6 +117,21 @@ function astronautToDom(storeId, newResponseObject) {
     src="${url}" alt="satellite image at longitude ${longitude}, latitude ${latitude}">
     <div class='error-container'>${errorString}</div>
     <p>Longitude: ${longitude}, Latitude: ${latitude}</p>
+    <p>Approximate date of Photo: ${dateArray[1]}-${dateArray[2]}-${dateArray[0]} </p>
+    <label for="radio">Adjust Resolution</label> <br>
+    
+    <input type="radio"name='degree' class="astronaut-degree-range" ${checkedClose} value=".05" name="degree">
+    <label for="radio">Close up </label> <br>
+    <input type="radio" name='degree'class="astronaut-degree-range" ${checkedMedium} value="0.1" name="degree">
+    <label for="radio">Medium  </label><br>
+    <input type="radio" name='degree'class="astronaut-degree-range" ${checkedWide} value="0.5" name="degree">
+    <label for="radio">Wide Angle  </label><br>
+    <input type="radio" name='degree'class="astronaut-degree-range" ${checkedSuper} value="1.0" name="degree">
+    <label for="radio">Super Wide Angle  </label><br>
+    <input type="radio" name='degree'class="astronaut-degree-range" ${checkedDuper} value="2.0" name="degree">
+    <label for="radio">Super Duper Wide Angle  </label><br>
+  <button id='adjust-button' class='astronaut-degree-adjust'>Get updated Resolution</button>
+   <br>
     <span>Get this location on a map!</span><button id='adjust-button' class='form-matching-map'>Get!</button><br>
     `;
   $('.form-results').html(htmlString);

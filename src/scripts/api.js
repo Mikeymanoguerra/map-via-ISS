@@ -12,7 +12,7 @@ const NASA_API_KEY =
 const MAP_URL =
   'https://www.mapquestapi.com/staticmap/v5/map?key=Zv1VRVyg4mhlWC8AmfdyyfhLhZS5EGcO&locations=';
 
-const getNasaImage = (coordinates, date = '2013-12-24', dim = .05, callback) => {
+const getNasaImage = (coordinates, date = '2013-12-24', dim = .1, callback) => {
   return $.getJSON(`${NASA_URL}${coordinates}&date=${date}&dim=${dim}&${NASA_API_KEY}`,
     callback);
 };
