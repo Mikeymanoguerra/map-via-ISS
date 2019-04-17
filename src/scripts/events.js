@@ -141,12 +141,12 @@ const nasaImageToDom = function (storeId, newResponseObject) {
     latitude,
   } = store.findLocationById(storeId);
 
-  let checkedClose, checkedMedium, checkedWide, checkedSuper, checkedDuper;
+  let checkedClose, checkedMedium, checkedWide, checkedSuper;
   zoomInDegrees === '.05' ? checkedClose = 'checked' : '';
   zoomInDegrees === '0.1' ? checkedMedium = 'checked' : '';
   zoomInDegrees === '0.5' ? checkedWide = 'checked' : '';
   zoomInDegrees === '1.0' ? checkedSuper = 'checked' : '';
-  zoomInDegrees === '2.0' ? checkedDuper = 'checked' : '';
+  
 
 
   const errorString = generateErrorString();
@@ -172,9 +172,7 @@ const nasaImageToDom = function (storeId, newResponseObject) {
     <label for="radio">Wide Angle  </label><br>
     <input type="radio" name='degree'class="nasa-degree-range" ${checkedSuper} value="1.0" name="degree">
     <label for="radio">Super Wide Angle  </label><br>
-    <input type="radio" name='degree'class="nasa-degree-range" ${checkedDuper} value="2.0" name="degree">
-    <label for="radio">Super Duper Wide Angle  </label><br>
-  <button id='adjust-button' class='nasa-degree-adjust'>Get updated Resolution</button>
+    <button id='adjust-button' class='nasa-degree-adjust'>Get updated Resolution</button>
     </div>
     `;
   $('.nasa-container').html(htmlString);
@@ -256,7 +254,6 @@ function render() {
 }
 
 function handleNasaResponse(storeId, res, mapOrSatellite = 'satellite') {
-  debugger;
   const dateArray = utils.dateArrayFromString(res.date);
   const responseData = {
     mapOrSatellite,
@@ -389,7 +386,7 @@ const onImageZoomAdjust = () => {
         return handleErrors('nasa-water');
       });
   });
-}
+};
 
 const onMapZoomAdjust = () => {
   $('.map-container')

@@ -2,7 +2,7 @@
 import { store } from './store';
 import { api } from './api';
 import { events } from './events';
-
+import { utils } from './utils';
 function secretFormToDom() {
   if (store.secretForm) {
     $('.secret-form-container').html(secretCoordinateForm.htmlString);
@@ -94,6 +94,47 @@ function onShowFormRequestOnMap() {
   });
 }
 
+
+function getFormDegreeValueAndStoreId(event) {
+  const storeId = parseInt(
+    $(event.currentTarget)
+      .siblings('img.form-map-image')
+      .attr('value'));
+  const imageId = parseInt(
+    $(event.currentTarget)
+      .siblings('img.form-map-image')
+      .attr('id'));
+  const zoomInDegrees =
+    $(event.currentTarget)
+      .siblings('input[name=degree]:checked')
+      .val();
+  return [
+    storeId, imageId, {
+      mapOrSatellite: 'spacewalk',
+      zoomInDegrees
+    }];
+}
+
+const onFormImageZoomAdjust = () => {
+  $('.secret-form-container').on('click', '.astronaut-degree-adjust', function (event) {
+    //  get the store Id and the user request
+    const [storeId, imageId, userRequest] = getFormDegreeValueAndStoreId(event);
+    // TODO: check for existing response. still need to check for Date array equality first
+    const { nasaCoordinates, successfulResponses } = events.getlocationObjectFromStore(storeId);
+    const dateArray = successfulResponses[imageId].dateArray;
+    const dateString = utils.dateToHyphenString(dateArray);
+    return api.getNasaImage(nasaCoordinates, dateString, userRequest.zoomInDegrees)
+      .then((res) => {
+        res.zoomInDegrees = userRequest.zoomInDegrees;
+        events.handleNasaResponse(storeId, res, userRequest.mapOrSatellite);
+        return events.render();
+      })
+      .catch(() => {
+        return events.handleErrors('form-water');
+      });
+  });
+};
+
 function astronautToDom(storeId, newResponseObject) {
 
   const { url, imageId, dateArray, zoomInDegrees } = newResponseObject;
@@ -102,12 +143,12 @@ function astronautToDom(storeId, newResponseObject) {
     latitude,
   } = store.findLocationById(storeId);
 
-  let checkedClose, checkedMedium, checkedWide, checkedSuper, checkedDuper;
+  let checkedClose, checkedMedium, checkedWide, checkedSuper;
   zoomInDegrees === '.05' ? checkedClose = 'checked' : '';
   zoomInDegrees === '0.1' ? checkedMedium = 'checked' : '';
   zoomInDegrees === '0.5' ? checkedWide = 'checked' : '';
   zoomInDegrees === '1.0' ? checkedSuper = 'checked' : '';
-  zoomInDegrees === '2.0' ? checkedDuper = 'checked' : '';
+
 
 
   const errorString = events.generateErrorString();
@@ -128,9 +169,7 @@ function astronautToDom(storeId, newResponseObject) {
     <label for="radio">Wide Angle  </label><br>
     <input type="radio" name='degree'class="astronaut-degree-range" ${checkedSuper} value="1.0" name="degree">
     <label for="radio">Super Wide Angle  </label><br>
-    <input type="radio" name='degree'class="astronaut-degree-range" ${checkedDuper} value="2.0" name="degree">
-    <label for="radio">Super Duper Wide Angle  </label><br>
-  <button id='adjust-button' class='astronaut-degree-adjust'>Get updated Resolution</button>
+    <button id='adjust-button' class='astronaut-degree-adjust'>Get updated Resolution</button>
    <br>
     <span>Get this location on a map!</span><button id='adjust-button' class='form-matching-map'>Get!</button><br>
     `;
@@ -163,6 +202,7 @@ const bindFormListeners = () => {
   onExposeCoordinateForm();
   onSecretFormSubmission();
   onShowFormRequestOnMap();
+  onFormImageZoomAdjust();
 };
 
 export const secretCoordinateForm = {
