@@ -135,7 +135,7 @@ function generateErrorString(reset) {
 
 const nasaImageToDom = function (storeId, newResponseObject) {
   const { url, imageId, dateArray, zoomInDegrees } = newResponseObject;
-  console.log(newResponseObject);
+ 
   const {
     longitude,
     latitude,
@@ -224,7 +224,6 @@ const mapToDom = (storeId, newResponseObject) => {
 };
 
 function render() {
-  console.log(store.state);
   secretCoordinateForm.secretFormToDom();
   if (store.currentDisplay.currentSatelliteOnDom) {
     const storeId = store.currentDisplay.currentSatelliteOnDom.storeId;
