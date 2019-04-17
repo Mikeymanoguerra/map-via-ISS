@@ -12,8 +12,6 @@ This app has a lot of possible extended features.
 
 Improved 'you are here' image for map view, that switches to an astronaut on form submission, (spacewalk).
 
-Display satellite image date, and ability to adjust zoom on satellite photos.
-
 View previous locations from the current session.
 
 smooth image transition
@@ -26,6 +24,7 @@ Collect my own DataSet, allow point and click locations for satellite images
 
 Make google earth obsolete.
 
+~~Display satellite image date, and ability to adjust zoom on satellite photos.~~
 
 
 
