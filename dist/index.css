@@ -2,12 +2,16 @@
   font-family: 'Rajdhani', sans-serif;
   padding: 0px;
   margin: 0px;
+  color:white
 }
 
 footer{
-  margin-top:20px;
+  margin:20px 10px;
 }
 
+html{
+  background-color: rgb(1, 7, 32);
+}
 
 h1{
   text-align: center;
@@ -18,7 +22,7 @@ p, span, label{
   margin-top: 10px;
 }
 .link-out{
-  color:black;
+  color:white;
 }
 
 .button-container {
@@ -28,7 +32,7 @@ p, span, label{
   width: 95%;
   padding: 15px 0px; 
   border-width : 1px 0px;
-  border-color: black;
+  border-color: white;
   border-style: solid;
 
 }
@@ -60,7 +64,7 @@ p, span, label{
   padding: 10px;
   transition-property:height;
   transition-timing-function: 2s;
-  border: 1px solid black;
+  border: 1px solid white;
 }
 img{
   display: block;
@@ -97,12 +101,12 @@ button#adjust-button{
 button{
   width: 160px;
   padding: 10px 0px;
-  font-size: 15px;
+  font-size: 17px;
   border-radius: 0px;
   border-width: 0px;
-  background-color: black;
-  color: white;
-  text-shadow: 0 0 10px white;
+  background-color: rgb(255, 255, 250);
+  color: black;
+  text-shadow: 0 0 10px black;
   transition: width 1s;
 }
 
@@ -162,7 +166,7 @@ transition: width 1s;
 }
 
 fieldset {
-  border: 1px solid black;
+  border: 1px solid white;
   padding: 5px;
   margin-bottom: 10px;
   min-width: 0;
