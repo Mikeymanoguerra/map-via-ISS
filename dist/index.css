@@ -59,7 +59,7 @@ p, span, label{
 
 .map-results, .nasa-results, .revealed-form{
   width: 500px;
-  max-width: 500px;
+  max-width: 95%;
   min-height: 650px;
   padding: 10px;
   transition-property:height;
