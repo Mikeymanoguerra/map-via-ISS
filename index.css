@@ -17,6 +17,11 @@ h1{
   text-align: center;
 }
 
+.app-description{
+  max-width: 450px;
+  text-align: center;
+}
+
 p, span, label{
   font-size: 20px;
   margin-top: 10px;
