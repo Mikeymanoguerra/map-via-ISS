@@ -21,7 +21,7 @@
   },
   "homepage": "https://github.com/Mikeymanoguerra/Views-via-ISS#readme",
   "dependencies": {
-    "jquery": "^3.4.1",
+    "jquery": "^3.5.0",
     "webpack": "^4.29.6"
   },
   "devDependencies": {
