@@ -36,7 +36,7 @@ p, span, label{
   margin-right: auto;
   text-align: center;
   width: 95%;
-  padding: 15px 0px; 
+  padding: 15px 0px;
   border-width : 1px 0px;
   border-color: white;
   border-style: solid;
@@ -58,7 +58,7 @@ p, span, label{
 
 .map-container, .nasa-container, .secret-form-container{
   min-width: 0px;
-  min-height: 200px;  
+  min-height: 200px;
   margin:1% 1% 0% 1%;
 
 }
@@ -101,7 +101,7 @@ button#adjust-button{
   width:auto;
   margin: 5px;
   padding: 5px 20px;
-  
+
 }
 
 button{
@@ -113,48 +113,48 @@ button{
   background-color: rgb(255, 255, 250);
   color: black;
   text-shadow: 0 0 10px black;
-  transition: width 1s;
+  transition: width 0.05s;
 }
 
 div.button-container .hover-button1{
-  transition-duration: 1s;
-  width:160px; 
+  transition-duration: 0.05s;
+  width:160px;
   display: inline-block;
   text-align: center;
   margin: 5px  60px;
   background-image: linear-gradient(to right,
   rgba(255, 0 , 0 , 0),
-  #0089ad, #008b8b, #2b8758, #697b25, 
+  #0089ad, #008b8b, #2b8758, #697b25,
   rgba(255, 0 , 0 , 0)
   );
 }
 
 div.button-container .hover-button2{
-   transition-duration: 1s;
-  width:160px; 
+   transition-duration: 0.05s;
+  width:160px;
   display: inline-block;
   text-align: center;
   margin: 5px  60px;
   background-image: linear-gradient(to right,
  rgba(255, 0 , 0 , 0),
-#697b25,#2b8758, #008b8b, #0089ad, 
+#697b25,#2b8758, #008b8b, #0089ad,
  rgba(255, 0 , 0 , 0)
  );
 }
 
 .button-container button:hover{
 width:200px;
-transition: width 1s;
+transition: width .25s;
 }
 
 .button-container .hover-button2:hover{
   margin:5px 0px;
   width: 280px;
-  transition-duration: 1s;
+  transition-duration: 0.05s;
   transition-timing-function: linear;
  background-image: linear-gradient(to right,
  rgba(255, 0 , 0 , 0),
-#697b25,#2b8758, #008b8b, #0089ad, 
+#697b25,#2b8758, #008b8b, #0089ad,
  rgba(255, 0 , 0 , 0)
  );
 }
@@ -162,8 +162,8 @@ transition: width 1s;
  .button-container .hover-button1:hover{
    margin:5px 0px;
    width: 280px;
-   transition-duration: 1s;
-   transition-timing-function: linear; 
+   transition-duration: 0.05s;
+   transition-timing-function: linear;
     background-image: linear-gradient(to right,
   rgba(255, 0 , 0 , 0),
   #0089ad, #008b8b, #2b8758, #697b25,
@@ -177,3 +177,4 @@ fieldset {
   margin-bottom: 10px;
   min-width: 0;
 }
+
