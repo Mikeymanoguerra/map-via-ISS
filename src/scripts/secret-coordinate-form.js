@@ -6,12 +6,13 @@ import { utils } from './utils';
 function secretFormToDom() {
   if (store.secretForm) {
     $('.secret-form-container').html(secretCoordinateForm.htmlString);
-  } else $('.secret-form-container').html(secretCoordinateForm.disappears);
+  }
+   else $('.secret-form-container').html(secretCoordinateForm.disappears);
 }
 
 const onExposeCoordinateForm = function () {
   $('#secret').on('click', function () {
-    store.handleSecretFormToggle();
+    store.toggleSecretForm();
     events.render();
   });
 };
@@ -40,17 +41,20 @@ function validateAndPrepareSubmission(event) {
   const longitude = longitudeObject.value;
   let error1 = validator(longitude);
   let error2 = validator(longitude);
+
   if (error1) {
     store.handleErrorMessage(error1);
     return [null];
   }
+
   if (error2) {
     store.handleErrorMessage(error2);
     return [null];
   }
-  const nasaCoordinates = `lon=${longitude}&lat=${latitude}`;
-  return [nasaCoordinates, longitude, latitude];
 
+  const nasaCoordinates = `lon=${longitude}&lat=${latitude}`;
+
+  return [nasaCoordinates, longitude, latitude];
 }
 
 function onSecretFormSubmission() {
@@ -58,9 +62,11 @@ function onSecretFormSubmission() {
     $('.coordinates-input').submit(function (event) {
       event.preventDefault();
       const [nasaCoordinates, longitude, latitude] = validateAndPrepareSubmission(event);
+
       if (!nasaCoordinates) {
         return events.render();
       }
+
       return api.getNasaImage(nasaCoordinates)
         .then(res => {
           const storeId = trickStoreWithCoordinates(longitude, latitude);
@@ -100,14 +106,17 @@ function getFormDegreeValueAndStoreId(event) {
     $(event.currentTarget)
       .siblings('img.form-map-image')
       .attr('value'));
+
   const imageId = parseInt(
     $(event.currentTarget)
       .siblings('img.form-map-image')
       .attr('id'));
+
   const zoomInDegrees =
     $(event.currentTarget)
       .siblings('input[name=degree]:checked')
       .val();
+
   return [
     storeId, imageId, {
       mapOrSatellite: 'spacewalk',
@@ -123,10 +132,12 @@ const onFormImageZoomAdjust = () => {
     const { nasaCoordinates, successfulResponses } = events.getlocationObjectFromStore(storeId);
     const dateArray = successfulResponses[imageId].dateArray;
     const dateString = utils.dateToHyphenString(dateArray);
+
     return api.getNasaImage(nasaCoordinates, dateString, userRequest.zoomInDegrees)
       .then((res) => {
         res.zoomInDegrees = userRequest.zoomInDegrees;
         events.handleNasaResponse(storeId, res, userRequest.mapOrSatellite);
+
         return events.render();
       })
       .catch(() => {
@@ -136,7 +147,6 @@ const onFormImageZoomAdjust = () => {
 };
 
 function astronautToDom(storeId, newResponseObject) {
-
   const { url, imageId, dateArray, zoomInDegrees } = newResponseObject;
   const {
     longitude,
@@ -160,7 +170,7 @@ function astronautToDom(storeId, newResponseObject) {
     <p>Longitude: ${longitude}, Latitude: ${latitude}</p>
     <p>Approximate date of Photo: ${dateArray[1]}-${dateArray[2]}-${dateArray[0]} </p>
     <label for="radio">Adjust Resolution</label> <br>
-    
+
     <input type="radio"name='degree' class="astronaut-degree-range" ${checkedClose} value=".05" name="degree">
     <label for="radio">Close up </label> <br>
     <input type="radio" name='degree'class="astronaut-degree-range" ${checkedMedium} value="0.1" name="degree">
@@ -170,7 +180,7 @@ function astronautToDom(storeId, newResponseObject) {
     <input type="radio" name='degree'class="astronaut-degree-range" ${checkedSuper} value="1.0" name="degree">
     <label for="radio">Super Wide Angle  </label><br>
     <button id='adjust-button' class='astronaut-degree-adjust'>Get updated Resolution</button>
-   <br>
+    <br>
     <span>Get this location on a map!</span><button id='adjust-button' class='form-matching-map'>Get!</button><br>
     `;
   $('.form-results').html(htmlString);
@@ -180,7 +190,7 @@ function astronautToDom(storeId, newResponseObject) {
 }
 
 const disappears = ` <div class="no-form"></div>`;
-const htmlString = ` 
+const htmlString = `
 <div class='revealed-form'>
 <form class='coordinates-input'>
  <fieldset>

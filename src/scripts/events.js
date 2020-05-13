@@ -12,26 +12,26 @@ function getlocationObjectFromStore(storeId) {
 
 function handleDateManipulation(dateArray, direction) {
   if (direction === 1) {
-    const moreRecentDate =
-      utils.goForwardInTimeOneMonth(dateArray);
+    const moreRecentDate = utils.goForwardInTimeOneMonth(dateArray);
     const newDateString = utils.dateToHyphenString(moreRecentDate);
     return [moreRecentDate, newDateString];
   }
+
   else {
-    const fartherBackDate =
-      utils.goBackInTimeOneMonth(dateArray);
+    const fartherBackDate = utils.goBackInTimeOneMonth(dateArray);
     const newDateString = utils.dateToHyphenString(fartherBackDate);
     return [fartherBackDate, newDateString];
   }
 }
 
 function handleTimeTraversal(storeId, userRequest, direction) {
-  const [previousSuccess] = store.getExistingSuccessfulResponse(storeId, userRequest.imageId);
+  const previousSuccess = store.getExistingSuccessfulResponse(storeId, userRequest.imageId);
   const { dateArray } = previousSuccess;
   let [newDateArray, dateString] = handleDateManipulation(dateArray, direction);
-  const userRequestWithDate = Object.assign({}, userRequest, {
+  const userRequestWithDate = {
+    ...userRequest,
     dateArray: newDateArray
-  });
+  };
 
   // TODO, Pull below code out, once this works
   const [existingAsset] =
@@ -90,12 +90,14 @@ function getStoreAndImageIds(event) {
     $(event.currentTarget)
       .siblings('img.nasa-map-image')
       .attr('id'));
-  return [
+
+  return {
     storeId,
-    {
+    userRequest: {
       imageId,
       mapOrSatellite: 'satellite',
-    }];
+    }
+  };
 }
 
 function getZoomValueAndStoreId(event) {
@@ -107,47 +109,48 @@ function getZoomValueAndStoreId(event) {
     $(event.currentTarget)
       .siblings('input.map-zoom-range')
       .val());
-  return [
-    storeId, {
+
+  return {
+    storeId,
+    userRequest: {
       mapOrSatellite: 'map',
       mapZoom: mapZoom + 2,
-    }];
+    }
+  };
 }
 
-function generateErrorString(reset) {
+function generateErrorString(reset = null) {
   if (reset) {
     return store.handleErrorMessage(reset);
   }
+
   if (store.formError) {
     const errorMessage = store.formError;
     return `<p>${errorMessage}</p>`;
   }
+
   if (store.nasaError) {
     const errorMessage = store.nasaError;
     return `<p>${errorMessage}</p>`;
   }
+
   if (store.formValidationError) {
     const errorMessage = store.formValidationError;
     return `<p>${errorMessage}</p>`;
   }
+
   return `<p></p>`;
 }
 
 const nasaImageToDom = function (storeId, newResponseObject) {
   const { url, imageId, dateArray, zoomInDegrees } = newResponseObject;
- 
-  const {
-    longitude,
-    latitude,
-  } = store.findLocationById(storeId);
+  const { longitude, latitude } = store.findLocationById(storeId);
 
   let checkedClose, checkedMedium, checkedWide, checkedSuper;
   zoomInDegrees === '.05' ? checkedClose = 'checked' : '';
   zoomInDegrees === '0.1' ? checkedMedium = 'checked' : '';
   zoomInDegrees === '0.5' ? checkedWide = 'checked' : '';
   zoomInDegrees === '1.0' ? checkedSuper = 'checked' : '';
-  
-
 
   const errorString = generateErrorString();
   const htmlString = `
@@ -163,7 +166,7 @@ const nasaImageToDom = function (storeId, newResponseObject) {
     <button id='adjust-button' class='go-forward'>Go forward in time</button>
    <br>
     <label for="radio">Adjust Resolution</label> <br>
-    
+
     <input type="radio"name='degree' class="nasa-degree-range" ${checkedClose} value=".05" name="degree">
     <label for="radio">Close up </label> <br>
     <input type="radio" name='degree'class="nasa-degree-range" ${checkedMedium} value="0.1" name="degree">
@@ -196,10 +199,10 @@ const mapToDom = (storeId, newResponseObject) => {
     <br>
     <br>
     <label for="Adjust">Adjust Resolution</label> <br>
-    <span> Zoom out </span> 
+    <span> Zoom out </span>
     <input type="range" class="map-zoom-range" name="Adjust" list='tickmarks' value='${mapZoom}'
     min="1" max="15">
-    <span> Zoom in </span> 
+    <span> Zoom in </span>
     <datalist id="tickmarks">
        <option value="1" label="1">
        <option value="2">
@@ -228,7 +231,7 @@ function render() {
   if (store.currentDisplay.currentSatelliteOnDom) {
     const storeId = store.currentDisplay.currentSatelliteOnDom.storeId;
     const imageId = store.currentDisplay.currentSatelliteOnDom.imageId;
-    const [responseObject] = store.getExistingSuccessfulResponse(storeId, imageId);
+    const responseObject = store.getExistingSuccessfulResponse(storeId, imageId);
 
     nasaImageToDom(storeId, responseObject);
   }
@@ -236,14 +239,14 @@ function render() {
   if (store.currentDisplay.currentMapOnDom) {
     const storeId = store.currentDisplay.currentMapOnDom.storeId;
     const imageId = store.currentDisplay.currentMapOnDom.imageId;
-    const [responseObject] = store.getExistingSuccessfulResponse(storeId, imageId);
+    const responseObject = store.getExistingSuccessfulResponse(storeId, imageId);
     mapToDom(storeId, responseObject);
   }
 
   if (store.currentDisplay.currentAstronautOnDom) {
     const storeId = store.currentDisplay.currentAstronautOnDom.storeId;
     const imageId = store.currentDisplay.currentAstronautOnDom.imageId;
-    const [responseObject] = store.getExistingSuccessfulResponse(storeId, imageId);
+    const responseObject = store.getExistingSuccessfulResponse(storeId, imageId);
     secretCoordinateForm.astronautToDom(storeId, responseObject);
   }
 
@@ -309,14 +312,14 @@ const onIssBasedSatelliteImageRequest = function () {
 
 const onRequestForEarlierImage = () => {
   $('.nasa-container').on('click', '.go-back', function (event) {
-    const [storeId, userRequest] = getStoreAndImageIds(event);
+    const { storeId, userRequest } = getStoreAndImageIds(event);
     handleTimeTraversal(storeId, userRequest, -1);
   });
 };
 
 const onRequestForLaterImage = () => {
   $('.nasa-container').on('click', '.go-forward', function (event) {
-    const [storeId, userRequest] = getStoreAndImageIds(event);
+    const { storeId, userRequest } = getStoreAndImageIds(event);
     handleTimeTraversal(storeId, userRequest, 1);
   });
 };
@@ -325,9 +328,11 @@ const onRequestForMatchingMap = function () {
   $('.nasa-container').on('click', '.matching-map', function () {
     const storeId = parseInt($(this).siblings('img.nasa-map-image').attr('value'));
     const { mapCoordinates } = getlocationObjectFromStore(storeId);
+
     return api.getMapData(mapCoordinates, 5)
       .then(url => {
         handleMapResponse(storeId, url);
+
         return render();
       })
       .catch(err => console.log(err));
@@ -338,9 +343,11 @@ function onRequestForMatchingSatelliteImage() {
   $('.map-container').on('click', '.matching-image', function () {
     const storeId = parseInt($(this).siblings('img.map-image').attr('value'));
     const { nasaCoordinates } = getlocationObjectFromStore(storeId);
+
     return api.getNasaImage(nasaCoordinates)
       .then((res) => {
         handleNasaResponse(storeId, res);
+
         return render();
       })
       .catch(() => {
@@ -352,10 +359,12 @@ function onRequestForMatchingSatelliteImage() {
 const onIssBasedMapRequest = function () {
   $('.button-container').on('click', '.js-get-map', function () {
     let storeId;
+
     return handleISSRequest()
       .then(_storeId => {
         storeId = _storeId;
         const { mapCoordinates } = getlocationObjectFromStore(storeId);
+
         return api.getMapData(mapCoordinates, 5);
       })
       .then(url => {
@@ -375,10 +384,12 @@ const onImageZoomAdjust = () => {
     const { nasaCoordinates, successfulResponses } = getlocationObjectFromStore(storeId);
     const dateArray = successfulResponses[imageId].dateArray;
     const dateString = utils.dateToHyphenString(dateArray);
+
     return api.getNasaImage(nasaCoordinates, dateString, userRequest.zoomInDegrees)
       .then((res) => {
         res.zoomInDegrees = userRequest.zoomInDegrees;
         handleNasaResponse(storeId, res);
+
         return render();
       })
       .catch(() => {
@@ -388,46 +399,47 @@ const onImageZoomAdjust = () => {
 };
 
 const onMapZoomAdjust = () => {
-  $('.map-container')
-    .on('click',
-      '.map-zoom-adjust', (event) => {
-        const [storeId, userRequest] = getZoomValueAndStoreId(event);
-        const [existingAsset] =
-          store.checkForExistingSuccessfulResponse(storeId, userRequest);
-        if (existingAsset) {
-          console.log('Got this image from local storage');
-          return mapToDom(storeId, existingAsset);
-          //  if imageId == current image ID, css notice.
-        }
-        const { mapCoordinates } = getlocationObjectFromStore(storeId);
-        return api.getMapData(mapCoordinates, userRequest.mapZoom)
-          .then(url => {
-            handleMapResponse(storeId, url, userRequest.mapZoom);
-            return render();
-          })
-          .catch(err => console.log(err));
-      });
+  $('.map-container').on('click', '.map-zoom-adjust', (event) => {
+    const { storeId, userRequest } = getZoomValueAndStoreId(event);
+    const [existingAsset] = store.checkForExistingSuccessfulResponse(storeId, userRequest);
+
+    if (existingAsset) {
+      console.log('Got this image from local storage');
+      return mapToDom(storeId, existingAsset);
+      //  if imageId == current image ID, css notice.
+    }
+
+    const { mapCoordinates } = getlocationObjectFromStore(storeId);
+
+    return api.getMapData(mapCoordinates, userRequest.mapZoom)
+      .then(url => {
+        handleMapResponse(storeId, url, userRequest.mapZoom);
+
+        return render();
+      })
+      .catch(err => console.log(err));
+  });
 };
 
 const bindEventListeners = () => {
-  onIssBasedSatelliteImageRequest();
-  onIssBasedMapRequest();
-  onRequestForMatchingMap();
-  onRequestForMatchingSatelliteImage();
-  onRequestForEarlierImage();
-  onRequestForLaterImage();
   onMapZoomAdjust();
   onImageZoomAdjust();
+  onIssBasedMapRequest();
+  onRequestForLaterImage();
+  onRequestForMatchingMap();
+  onRequestForEarlierImage();
+  onIssBasedSatelliteImageRequest();
+  onRequestForMatchingSatelliteImage();
 };
 
 export const events = {
+  render,
   handleErrors,
-  generateErrorString,
-  handleNasaResponse,
   handleMapResponse,
-  getlocationObjectFromStore,
+  handleNasaResponse,
   bindEventListeners,
-  render
+  generateErrorString,
+  getlocationObjectFromStore,
 };
 
 

@@ -1,41 +1,30 @@
 import { api } from "./api";
 import { events } from "./events";
 
+const buildLocationObject = (responseData) => {
+  let latitude = Math.round(responseData.latitude * 10000) / 10000;
+  let longitude = Math.round(responseData.longitude * 10000) / 10000;
 
-const buildCoordinateStrings = (responseData) => {
-  let latitude = responseData.latitude;
-  let longitude = responseData.longitude;
-  latitude = Math.round(latitude * 10000) / 10000;
-  longitude = Math.round(longitude * 10000) / 10000;
   const nasaCoordinates = `lon=${longitude}&lat=${latitude}`;
   const mapCoordinates = `${latitude},${longitude}`;
-  return [latitude, longitude, nasaCoordinates, mapCoordinates];
-};
 
-const buildLocationObject = function (coordinateStringArray) {
-  const [latitude, longitude, nasaCoordinates, mapCoordinates] = coordinateStringArray;
-  const locationObject = {
-    storeId: store.requestId,
-    nasaCoordinates,
-    mapCoordinates,
-    longitude,
+  return {
     latitude,
+    longitude,
+    mapCoordinates,
+    nasaCoordinates,
     imageIdCount: 0,
-    successfulResponses: []
-  };
-  return locationObject;
+    successfulResponses: [],
+    storeId: store.requestId,
+  }
 };
 
 const parseCoordinatesAndGetStoreId = function (responseData) {
-  const coordinateStringArray = buildCoordinateStrings(responseData);
-  const freshlocation = buildLocationObject(coordinateStringArray);
-  pushToArray(freshlocation);
+  const freshlocation = buildLocationObject(responseData);
+  store.state.push(freshlocation);
   store.requestId++;
-  return freshlocation.storeId;
-};
 
-const pushToArray = function (obj) {
-  store.state.push(obj);
+  return freshlocation.storeId;
 };
 
 const findLocationById = function (storeId) {
@@ -48,10 +37,12 @@ const findLocationById = function (storeId) {
 
 const checkForExistingSuccessfulResponse = (storeId, userRequest) => {
   const locationObject = findLocationById(storeId);
+
   if (userRequest.mapOrSatellite === 'map') {
     return locationObject.successfulResponses.filter(item =>
       item.mapZoom === userRequest.mapZoom);
   }
+
   if (userRequest.mapOrSatellite === 'satellite') {
     return locationObject.successfulResponses.filter(item =>
       item.dateArray === userRequest.dateArray
@@ -63,13 +54,14 @@ const checkForExistingSuccessfulResponse = (storeId, userRequest) => {
 const getExistingSuccessfulResponse = (storeId, imageId) => {
   const locationObject = findLocationById(storeId);
   return locationObject.successfulResponses.filter(img =>
-    img.imageId === imageId);
+    img.imageId === imageId)[0];
 };
 
 const handleResponseStorage = (storeId, responseData) => {
   const locationObject = findLocationById(storeId);
   let imageId = locationObject.imageIdCount;
   locationObject.imageIdCount++;
+
   if (responseData.mapOrSatellite === 'map') {
     const { mapOrSatellite, url, mapZoom } = responseData;
     let newResponseObject = {
@@ -78,18 +70,21 @@ const handleResponseStorage = (storeId, responseData) => {
       url,
       mapZoom,
     };
+
     return addApiResponseToLocationObject(storeId, newResponseObject);
   }
+
   if (responseData.mapOrSatellite === 'satellite' ||
     responseData.mapOrSatellite === 'spacewalk') {
     const { mapOrSatellite, url, dateArray, zoomInDegrees } = responseData;
     let newResponseObject = {
-      imageId,
-      mapOrSatellite,
       url,
+      imageId,
       dateArray,
-      zoomInDegrees
+      zoomInDegrees,
+      mapOrSatellite,
     };
+
     return addApiResponseToLocationObject(storeId, newResponseObject);
   }
 };
@@ -100,87 +95,77 @@ const addApiResponseToLocationObject = (storeId, newResponseObject) => {
     ...locationObject.successfulResponses,
     newResponseObject
   ];
+
   return updateCurrentDisplay(storeId, newResponseObject);
 };
 
 const updateCurrentDisplay = (storeId, newResponseObject) => {
-  if (newResponseObject.mapOrSatellite === 'map') {
-    store.currentDisplay = Object.assign({}, store.currentDisplay, {
-      currentMapOnDom: {
-        storeId,
-        imageId: newResponseObject.imageId
-      }
-    });
-  }
-  if (newResponseObject.mapOrSatellite === 'satellite') {
-    store.currentDisplay = Object.assign({}, store.currentDisplay, {
-      currentSatelliteOnDom: {
-        storeId,
-        imageId: newResponseObject.imageId
-      }
-    });
-  }
-  if (newResponseObject.mapOrSatellite === 'spacewalk') {
-    store.currentDisplay = Object.assign({}, store.currentDisplay, {
-      currentAstronautOnDom: {
-        storeId,
-        imageId: newResponseObject.imageId
-      }
-    });
-  }
+  const assetType = newResponseObject.mapOrSatellite.slice(0, 1).toUpperCase().concat(newResponseObject.mapOrSatellite.slice(1))
+  const key = `current${assetType}OnDom`
+
+  store.currentDisplay = {
+    ...store.currentDisplay,
+    [key]: {
+      storeId,
+      imageId: newResponseObject.imageId
+    }
+  };
 };
 
-const handleSecretFormToggle = () => {
+const toggleSecretForm = () => {
   store.secretForm = !store.secretForm;
 };
 
 const handleErrorMessage = (errorType = null) => {
   if (errorType === 'nasa-water') {
-    store.nasaError = `The ISS is probably over water, 
+    store.nasaError = `The ISS is probably over water,
     and there is not a corresponding LandSat 8 photo.
     Enjoy A Randomly chosen island photo`;
   }
+
   if (errorType === 'nasa-date') {
     store.nasaError = `There is no LandSat 8 photo from this time perio.
     Explore in the other direction.`;
   }
+
   if (errorType === 'form-water') {
-    store.formError = `The ISS is probably over water, 
+    store.formError = `The ISS is probably over water,
     and there is not a corresponding LandSat 8 photo.
     Enjoy A Randomly chosen island photo`;
   }
+
   if (errorType === 'form-input-length') {
     store.formValidationError = '10 characters or less please!';
   }
+
   if (errorType === 'form-characters') {
     store.formValidationError = 'Decimal degrees only include 0-9, periods, and minus sign.';
   }
+
   if (errorType === 'form-500') {
     store.formError = '500 error from server. try again later!';
   }
+
   if (errorType === 'nasa-500') {
     store.nasaError = '500 error from server. try again later!';
   }
+
   if (errorType === 'form-reset') {
     store.formError = null;
     store.formValidationError = null;
   }
 
   if (errorType === 'nasa-reset') store.nasaError = null;
-
-};
-
-const determineErrorLocation = (errorType) => {
-  const errorLocation = errorType.slice(0, 4);
-  let mapOrSatellite = 'satellite';
-  if (errorLocation === 'form') mapOrSatellite = 'spacewalk';
-  return [errorLocation, mapOrSatellite];
 };
 
 const chooseRandomIslandFromMemory = (errorType) => {
-  const [errorLocation, mapOrSatellite] = determineErrorLocation(errorType);
   const storeId = Math.floor(Math.random() * 9 + 1);
   const { nasaCoordinates } = findLocationById(storeId);
+
+  const errorLocation = errorType.slice(0, 4);
+  const mapOrSatellite = errorLocation === 'form' ? 'spacewalk' : 'satellite';
+
+
   return api.getNasaImage(nasaCoordinates)
     .then(res => {
       return events.handleNasaResponse(storeId, res, mapOrSatellite);
@@ -188,6 +173,7 @@ const chooseRandomIslandFromMemory = (errorType) => {
     .catch(() => {
       const errorType = `${errorLocation}-500`;
       handleErrorMessage(errorType);
+
       return events.render();
     });
 };
@@ -286,23 +272,22 @@ const ERROR_REDIRECTS = [
 ];
 
 export const store = {
-  state: [...ERROR_REDIRECTS],
-  currentDisplay: {},
   requestId: 10,
-  secretForm: false,
-  parseCoordinatesAndGetStoreId,
-  pushToArray,
-  findLocationById,
   nasaError: null,
   formError: null,
+  secretForm: false,
+  currentDisplay: {},
   formValidationError: null,
-  handleResponseStorage,
-  checkForExistingSuccessfulResponse,
-  getExistingSuccessfulResponse,
-  handleSecretFormToggle,
-  updateCurrentDisplay,
+  state: [...ERROR_REDIRECTS],
+  findLocationById,
+  toggleSecretForm,
   handleErrorMessage,
-  chooseRandomIslandFromMemory
+  updateCurrentDisplay,
+  handleResponseStorage,
+  chooseRandomIslandFromMemory,
+  getExistingSuccessfulResponse,
+  parseCoordinatesAndGetStoreId,
+  checkForExistingSuccessfulResponse,
 };
 
 

@@ -49,10 +49,16 @@ const dateToHyphenString = (dateArray) => {
   if (date > 28) {
     date = 28;
   }
+
   return `${year}-${month}-${date}`;
 };
 
 function dateArrayFromString(dateTimeString) {
+  if(!dateTimeString){
+    // api no longer returns a date. in lieu of parsing from url
+    return [2013, 10, 31]
+  }
+
   const dateOnlyString = dateTimeString.slice(0, 10);
   const dateStringArray = dateOnlyString.split('-');
   const dateArray = dateStringArray.map(num => parseInt(num));
