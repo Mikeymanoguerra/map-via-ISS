@@ -18,7 +18,6 @@ const getNasaImage = (coordinates, date = '2013-12-24', dim = .1) => {
       if (!res.ok) {
         return Promise.reject(res.statusText);
       }
-      console.log(res)
       return res
     });
 };
